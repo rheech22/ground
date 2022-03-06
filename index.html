@@ -6,8 +6,64 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <script defer type="module" src="./build/main.js"></script>
+  <link rel="stylesheet" href="./build/styles.css">
 </head>
 <body>
-  <p>Hello!</p>
+  <header>
+    <h1>GROUND</h1>
+  </header>
+  <custom-main>
+    <nav slot="tab-buttons">
+      <button class="tabs">TASKS</button>
+      <button class="tabs">MEMOS</button>
+      <button class="tabs">IMAGES</button>
+      <button class="tabs">VIDEOS</button>
+    </nav>
+    <section data-name="tasks">
+      <button type="button" id="addCategory">Add Task Category</button>
+    </section>
+    <section data-name="memos">
+      <button type="button" id="addMemo">Add Memo</button>
+    </section>
+    <section data-name="images">
+      <button type="button" id="addImage">Add Image</button>
+    </section>
+    <section data-name="videos">
+      <button type="button" id="addVideo">Add Video</button>
+    </section>
+  </custom-main>
+  <div class="modalWrapper">
+    <div class="modal">
+      <input id="modalInput1"/>
+      <input id="modalInput2"/>      
+      <button id="closeModal">X</button>
+      <button id="submit">submit</button>
+    </div>
+  </div>
+  <template id="template">
+    <style>
+      :host {
+        display: flex;
+        flex-direction: column;
+        contain: content;
+        padding: 0 5%;
+      }
+      div + div {
+        margin-top: 1em;
+      }
+      ::slotted(nav) {
+        display: flex;
+      }
+      ::slotted(section) {
+        background-color: cadetblue;
+      }
+    </style>
+    <div>
+      <slot name="tab-buttons"></slot>
+    </div>
+    <div>
+      <slot name="tab-content">Welcome to Ground</slot>
+    </div>
+  </template>
 </body>
 </html>
