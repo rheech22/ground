@@ -27,18 +27,20 @@ export default class MemoTab extends Tab {
         this.modalForm.appendChild(button);
     }
     submit(inputValues) {
-        console.log(inputValues);
-        // if(!this.firstInput.value) return;
-        // this.memos.push({
-        //   title: this.firstInput.value,
-        //   description: this.secondInput.value,
-        // });
+        if (inputValues.length === 2) {
+            if (!inputValues[0] || !inputValues[1])
+                return;
+            this.memos.push({
+                title: inputValues[0],
+                description: inputValues[1]
+            });
+        }
+        ;
         this.popDown();
         this.render();
     }
     ;
     render() {
-        // this.secondInput.value = '';
         this.dataContainer.innerHTML = '';
         this.memos && this.memos.map(element => {
             const container = document.createElement('div');

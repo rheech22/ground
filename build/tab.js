@@ -30,8 +30,23 @@ export default class Tab {
     }
     ;
     popDown() {
-        // this.firstInput.value = '';
         this.modal.style.display = 'none';
+        [...this.modalForm.elements].forEach(element => {
+            if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
+                if (element.id === 'font') {
+                    element.value = '#ffffff';
+                    return;
+                }
+                ;
+                if (element.id === 'background') {
+                    element.value = '#26de81';
+                    return;
+                }
+                ;
+                element.value = '';
+            }
+            ;
+        });
     }
     ;
 }

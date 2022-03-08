@@ -18,13 +18,13 @@ export default class TaskTab extends Tab {
         label2.htmlFor = 'font';
         label2.innerHTML = `
       Font
-      <input type="color" id="font"/>
+      <input type="color" id="font" value="#ffffff"/>
     `;
         const label3 = document.createElement('label');
         label3.htmlFor = 'background';
         label3.innerHTML = `
       Background
-      <input type="color" id="background"/>
+      <input type="color" id="background" value="#26de81"/>
     `;
         this.modalForm.prepend(label1, label2, label3);
         const button = document.createElement('button');

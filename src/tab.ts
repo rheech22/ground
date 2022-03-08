@@ -4,9 +4,6 @@ export default abstract class Tab {
   private modal: HTMLDivElement = document.querySelector('.modalWrapper') as HTMLDivElement;
   private closeButton: HTMLButtonElement = document.getElementById('closeModal') as HTMLButtonElement;
   protected modalForm: HTMLFormElement = document.getElementById('modalForm') as HTMLFormElement;
-  // protected submitButton: HTMLButtonElement = document.getElementById('submit') as HTMLButtonElement;
-  // protected firstInput: HTMLInputElement = document.getElementById('modalInput1') as HTMLInputElement;
-  // protected secondInput: HTMLInputElement = document.getElementById('modalInput2') as HTMLInputElement;
   protected dataContainer: HTMLDivElement;
   protected handleClick: (e:SubmitEvent) => void;
 
@@ -37,8 +34,20 @@ export default abstract class Tab {
   };
   
   protected popDown(){
-    // this.firstInput.value = '';
     this.modal.style.display = 'none';
+    [...this.modalForm.elements].forEach(element => {
+      if(element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
+        if(element.id === 'font'){
+          element.value = '#ffffff';
+          return
+        };
+        if(element.id === 'background'){
+          element.value = '#26de81';
+          return
+        };
+        element.value = '';
+      };
+    })
   };
 
   protected abstract setModalInputs(): void;
