@@ -21,23 +21,26 @@
     </nav>
     <section data-name="tasks">
       <button type="button" id="addCategory">Add Task Category</button>
+      <div class="data-container"></div>
     </section>
     <section data-name="memos">
       <button type="button" id="addMemo">Add Memo</button>
+      <div class="data-container"></div>
     </section>
     <section data-name="images">
       <button type="button" id="addImage">Add Image</button>
+      <div class="data-container"></div>
     </section>
     <section data-name="videos">
       <button type="button" id="addVideo">Add Video</button>
+      <div class="data-container"></div>
     </section>
   </custom-main>
   <div class="modalWrapper">
     <div class="modal">
-      <input id="modalInput1"/>
-      <input id="modalInput2"/>      
       <button id="closeModal">X</button>
-      <button id="submit">submit</button>
+      <form id="modalForm">
+      </form>
     </div>
   </div>
   <template id="template">

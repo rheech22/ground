@@ -1,17 +1,26 @@
 export default class Tab {
     constructor(element) {
-        this.data = [];
-        this.button = document.getElementById('addCategory');
         this.modal = document.querySelector('.modalWrapper');
         this.closeButton = document.getElementById('closeModal');
-        this.submitButton = document.getElementById('submit');
-        this.firstInput = document.getElementById('modalInput1');
-        this.secondInput = document.getElementById('modalInput2');
-        this.dataContainer = document.createElement('div');
+        this.modalForm = document.getElementById('modalForm');
         this.element = element;
-        this.button.addEventListener('click', this.popUp.bind(this));
+        this.dataContainer = this.element.querySelector('.data-container');
+        this.addButton = this.element.querySelector('button');
         this.closeButton.addEventListener('click', this.popDown.bind(this));
-        this.submitButton.addEventListener('click', this.submit.bind(this));
+        this.addButton.addEventListener('click', this.popUp.bind(this));
+        this.handleClick = (e) => {
+            e.preventDefault();
+            let inputValues = [];
+            if (e.target instanceof HTMLFormElement) {
+                [...e.target.elements].forEach(element => {
+                    if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
+                        inputValues.push(element.value);
+                    }
+                });
+            }
+            ;
+            this.submit(inputValues);
+        };
         this.setModalInputs();
         this.render();
     }
@@ -21,16 +30,8 @@ export default class Tab {
     }
     ;
     popDown() {
-        this.firstInput.value = '';
+        // this.firstInput.value = '';
         this.modal.style.display = 'none';
-    }
-    ;
-    submit() {
-        if (!this.firstInput.value)
-            return;
-        this.setData();
-        this.popDown();
-        this.render();
     }
     ;
 }
