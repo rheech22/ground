@@ -1,17 +1,17 @@
 import Tab from './tab.js';
 
-type Memo = {
+type Video = {
   title: string;
-  description: string;
+  videoId: string;
 };
 
-export default class MemoTab extends Tab {
-  memos: Memo[];
+export default class VideoTab extends Tab {
+  videos: Video[];
   
   constructor(element: HTMLElement){
     super(element);
-    const data = JSON.parse(localStorage.getItem('memos') as string);
-    this.memos = data || [];
+    const data = JSON.parse(localStorage.getItem('videos') as string);
+    this.videos = data || [];
     this.modalForm.addEventListener('submit', this.handleClick);
     this.render();
   };
@@ -27,10 +27,10 @@ export default class MemoTab extends Tab {
     `;
 
     const label2 = document.createElement('label');
-    label2.htmlFor = 'description';
+    label2.htmlFor = 'videoUrl';
     label2.innerHTML = `
-      Description
-      <textarea id='description'/>
+      URL
+      <input type="text" id='videoUrl'/>    
     `;
 
     this.modalForm.prepend(label1, label2);
@@ -45,11 +45,17 @@ export default class MemoTab extends Tab {
   submit(inputValues: string[]){
     if(inputValues.length === 2){
       if(!inputValues[0] || !inputValues[1]) return;
-      this.memos.push({
-        title: inputValues[0],
-        description: inputValues[1]
+      const title = inputValues[0];
+      let videoId = inputValues[1].split('v=')[1];
+      const ampersandIndex = videoId.indexOf('&');
+      if(ampersandIndex !== -1) {
+        videoId = videoId.substring(0, ampersandIndex);
+      };
+      this.videos.push({
+        title,
+        videoId
       });
-      localStorage.setItem('memos', JSON.stringify(this.memos));
+      localStorage.setItem('videos', JSON.stringify(this.videos));
     };
     this.popDown();
     this.render();
@@ -58,13 +64,12 @@ export default class MemoTab extends Tab {
   render(){
     this.dataContainer.innerHTML = '';
 
-    this.memos && this.memos.map(element=> {
+    this.videos && this.videos.map(element=> {
       const container = document.createElement('div');
-      const title = document.createElement('h6');
-      const description = document.createElement('p');
-      title.innerHTML = element.title;
-      description.innerHTML = element.description;
-      container.append(title, description);
+      container.innerHTML = `
+        <h6>${element.title}</h6>
+        <lite-youtube videoid=${element.videoId} posterloading></lite-youtube>
+      `;
       this.dataContainer.appendChild(container);
     });
 

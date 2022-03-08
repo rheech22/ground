@@ -2,6 +2,10 @@ p {
   color: red;
 }
 
+button {
+  cursor: pointer;
+}
+
 .modalWrapper {
   position: absolute;
   top: 0;
@@ -22,6 +26,11 @@ p {
   background-color: white;
   width: 30%;
   height: 30%;
+}
+
+#modalForm {
+  display: flex;
+  flex-direction: column;
 }
 
 /*# sourceMappingURL=styles.css.map */

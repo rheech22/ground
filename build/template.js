@@ -1,8 +1,12 @@
-import MemoTab from "./memos.js";
 import TaskTab from "./tasks.js";
+import MemoTab from "./memos.js";
+import ImageTab from "./images.js";
+import VideoTab from "./videos.js";
 const tabs = {
     tasks: TaskTab,
     memos: MemoTab,
+    images: ImageTab,
+    videos: VideoTab
 };
 export default class Template extends HTMLElement {
     constructor() {

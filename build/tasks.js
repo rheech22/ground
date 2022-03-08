@@ -2,8 +2,9 @@ import Tab from './tab.js';
 export default class TaskTab extends Tab {
     constructor(element) {
         super(element);
-        this.categories = [];
+        this.categories = JSON.parse(localStorage.getItem('categories')) || [];
         this.modalForm.addEventListener('submit', this.handleClick);
+        this.render();
     }
     ;
     setModalInputs() {
@@ -41,6 +42,7 @@ export default class TaskTab extends Tab {
                 fontColor: inputValues[1],
                 buttonColor: inputValues[2]
             });
+            localStorage.setItem('categories', JSON.stringify(this.categories));
         }
         ;
         this.popDown();

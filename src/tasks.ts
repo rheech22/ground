@@ -11,8 +11,9 @@ export default class TaskTab extends Tab {
     
   constructor(element: HTMLElement){
     super(element);
-    this.categories = [];
+    this.categories = JSON.parse(localStorage.getItem('categories') as string) || [];
     this.modalForm.addEventListener('submit', this.handleClick);
+    this.render();
   };
 
   setModalInputs(){
@@ -50,6 +51,7 @@ export default class TaskTab extends Tab {
         fontColor: inputValues[1],
         buttonColor: inputValues[2]
       });
+      localStorage.setItem('categories', JSON.stringify(this.categories));
     };
 
     this.popDown();
