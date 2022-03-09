@@ -8,38 +8,41 @@
   <script defer type="module" src="./build/main.js"></script>
   <link rel="stylesheet" href="./build/styles.css">
   <script type="module" src="https://cdn.jsdelivr.net/npm/@justinribeiro/lite-youtube@1.3.1/lite-youtube.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Julius+Sans+One&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
-    <h1>GROUND</h1>
+    <h1>Ground.</h1>
   </header>
   <custom-main>
     <nav slot="tab-buttons">
-      <button class="tabs">TASKS</button>
-      <button class="tabs">MEMOS</button>
-      <button class="tabs">IMAGES</button>
-      <button class="tabs">VIDEOS</button>
+      <button class="tabs">Tasks</button>
+      <button class="tabs">Memos</button>
+      <button class="tabs">Images</button>
+      <button class="tabs">Videos</button>
     </nav>
     <section data-name="tasks">
-      <button type="button" id="addCategory">Add Task Category</button>
+      <button type="button" id="addCategory">+ Label</button>
       <div class="data-container"></div>
     </section>
     <section data-name="memos">
-      <button type="button" id="addMemo">Add Memo</button>
+      <button type="button" id="addMemo">+ Memo</button>
       <div class="data-container"></div>
     </section>
     <section data-name="images">
-      <button type="button" id="addImage">Add Image</button>
+      <button type="button" id="addImage">+ Image</button>
       <div class="data-container"></div>
     </section>
     <section data-name="videos">
-      <button type="button" id="addVideo">Add Video</button>
+      <button type="button" id="addVideo">+ Video</button>
       <div class="data-container"></div>
     </section>
-  </custom-main>
+  </custom-main>  
   <div class="modalWrapper">
     <div class="modal">
-      <button id="closeModal">X</button>
+      <button id="closeModal">_</button>
       <form id="modalForm">
       </form>
     </div>
@@ -49,18 +52,17 @@
       :host {
         display: flex;
         flex-direction: column;
+        align-items: center;
         contain: content;
         padding: 0 5%;
-      }
+        width: 100%;
+      };
       div + div {
         margin-top: 1em;
-      }
-      ::slotted(nav) {
-        display: flex;
-      }
-      ::slotted(section) {
-        background-color: cadetblue;
-      }
+      };
+      div{
+        width: 100%;
+      };
     </style>
     <div>
       <slot name="tab-buttons"></slot>

@@ -12,24 +12,24 @@ export default class TaskTab extends Tab {
         const label1 = document.createElement('label');
         label1.htmlFor = 'category';
         label1.innerHTML = `
-      Category
-      <input type="text" id="category"/>    
+      Label
+      <input type="text" id="category" placeholder="Enter a label"/>    
     `;
         const label2 = document.createElement('label');
         label2.htmlFor = 'font';
         label2.innerHTML = `
-      Font
+      Font-Color
       <input type="color" id="font" value="#ffffff"/>
     `;
         const label3 = document.createElement('label');
         label3.htmlFor = 'background';
         label3.innerHTML = `
-      Background
+      Background-Color
       <input type="color" id="background" value="#26de81"/>
     `;
         this.modalForm.prepend(label1, label2, label3);
         const button = document.createElement('button');
-        button.innerText = 'submit';
+        button.innerText = 'Add';
         button.type = 'submit';
         this.modalForm.appendChild(button);
     }

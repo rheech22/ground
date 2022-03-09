@@ -11,16 +11,16 @@ export default class ImageTab extends Tab {
     setModalInputs() {
         this.modalForm.innerHTML = '';
         const label1 = document.createElement('label');
-        label1.htmlFor = 'title';
+        label1.htmlFor = 'imageUrl';
         label1.innerHTML = `
-      Title
-      <input type="text" id='title'/>    
+    URL
+    <input type="text" id='imageUrl' placeholder="Paste the image URL"/>    
     `;
         const label2 = document.createElement('label');
-        label2.htmlFor = 'imageUrl';
+        label2.htmlFor = 'description';
         label2.innerHTML = `
-      URL
-      <input type="text" id='imageUrl'/>    
+      Description
+      <input type="text" id='description' placeholder="Enter a description for the image"/>    
     `;
         this.modalForm.prepend(label1, label2);
         const button = document.createElement('button');
@@ -33,7 +33,7 @@ export default class ImageTab extends Tab {
             if (!inputValues[0] || !inputValues[1])
                 return;
             this.images.push({
-                title: inputValues[0],
+                description: inputValues[0],
                 imageUrl: inputValues[1]
             });
             localStorage.setItem('images', JSON.stringify(this.images));
@@ -47,11 +47,11 @@ export default class ImageTab extends Tab {
         this.dataContainer.innerHTML = '';
         this.images && this.images.map(element => {
             const container = document.createElement('div');
-            const title = document.createElement('h6');
+            const description = document.createElement('h6');
             const image = document.createElement('img');
-            title.innerHTML = element.title;
+            description.innerHTML = element.description;
             image.src = element.imageUrl;
-            container.append(image, title);
+            container.append(image, description);
             this.dataContainer.appendChild(container);
         });
         this.element.appendChild(this.dataContainer);

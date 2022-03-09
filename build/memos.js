@@ -19,13 +19,13 @@ export default class MemoTab extends Tab {
         const label2 = document.createElement('label');
         label2.htmlFor = 'description';
         label2.innerHTML = `
-      Description
-      <textarea id='description'/>
+      Contents
+      <textarea id="description"></textarea>
     `;
         this.modalForm.prepend(label1, label2);
         const button = document.createElement('button');
         button.type = 'submit';
-        button.innerText = 'submit';
+        button.innerText = 'Add';
         this.modalForm.appendChild(button);
     }
     submit(inputValues) {

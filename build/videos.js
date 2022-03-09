@@ -11,16 +11,16 @@ export default class VideoTab extends Tab {
     setModalInputs() {
         this.modalForm.innerHTML = '';
         const label1 = document.createElement('label');
-        label1.htmlFor = 'title';
+        label1.htmlFor = 'videoUrl';
         label1.innerHTML = `
-      Title
-      <input type="text" id='title'/>    
+    URL
+    <input type="text" id='videoUrl' placeholder="Paste the video URL"/>    
     `;
         const label2 = document.createElement('label');
-        label2.htmlFor = 'videoUrl';
+        label2.htmlFor = 'description';
         label2.innerHTML = `
-      URL
-      <input type="text" id='videoUrl'/>    
+      Description
+      <input type="text" id='description' placeholder="Enter a description for the video"/>    
     `;
         this.modalForm.prepend(label1, label2);
         const button = document.createElement('button');
