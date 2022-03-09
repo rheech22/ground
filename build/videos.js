@@ -25,7 +25,7 @@ export default class VideoTab extends Tab {
         this.modalForm.prepend(label1, label2);
         const button = document.createElement('button');
         button.type = 'submit';
-        button.innerText = 'submit';
+        button.innerText = 'Add';
         this.modalForm.appendChild(button);
     }
     submit(inputValues) {

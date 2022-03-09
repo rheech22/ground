@@ -14,30 +14,43 @@ body {
   align-items: center;
   width: 100%;
   height: 100vh;
+  margin: 0;
 };
 
 header {
   width: 100%;
   text-align: center;
   font-family: 'Julius Sans One', sans-serif;
+  background-color: black;
+  color: white;
 };
 
 custom-main {
   width: 100%;
+  background-color: black;
 };
 
 nav {
   display: flex;
   width: 100%;
+  background-color: black;
   
   button {
     font-family: 'Julius Sans One', sans-serif;
     font-size: 16px;
-    margin-bottom: 1em;
-    border: 1px solid black;
+    margin: 0em .3em;
+    border: none;
+    border-radius: 5px 5px 0 0;
     width: 100px;
     height: 70px;
-    background-color: white;
+    background-color: #353b48;
+    color: white;
+    transition: all .5s;
+
+    &:hover {
+      background-color: white;
+      color: black;
+    }
   }
 };
 
@@ -45,25 +58,44 @@ section {
   display: flex;
   flex-direction: column;
   align-items:flex-end;
-  width: 400px;
-  button {
+  width: 100vw;
+  padding: 0 2em;
+  background-color: white;
+  & > button {
     background: none;
     border: none;
-    font-size: 0.5em;
-    padding: 1em;
-    margin-bottom: 2em;
+    font-size: 1em;
+    padding: 1em 0em 1em 1em;
   };
   div {
     width: 100%;
-  }
+  };
 };
 
 button {
   cursor: pointer;
 };
 
+h6 {
+  font-size: 1em;
+  font-weight: 600;
+  margin: 0;
+  margin-bottom: 1em;
+}
+
+p {
+  margin: 0;
+}
+
+.active {
+  background-color: white;
+  color: black;
+};
+
 .data-container {
-  div {
+  & > div {
+    display: flex;
+    flex-direction: column;
     padding: 1em;
     background-color: #F6F6F6;
   };
@@ -71,9 +103,29 @@ button {
     margin-top: 1em;
   };
   button {
-    margin-right: 1em;
+    border: none;
+    border-radius: .3em;
+    padding: .5em 1em;
+    margin: .5em;
   };
 }
+
+.image-container {
+  display: flex;
+  flex-direction: row !important;
+  padding: 1em;
+  div {
+    min-width: 300px;
+    height: 300px;
+    margin-right: 1em;
+    background-size: cover;
+  };
+  p {
+    overflow-y: scroll;
+    height: 300px;
+    font-size: 10px;
+  }
+};
 
 .modalWrapper {
   position: absolute;
@@ -109,10 +161,12 @@ button {
     &:last-child {
       margin-top: auto;
       padding: .5em 1em;
-      background-color: tomato;
+      background-color: black;
       border-radius: .3em;
       color: white;
       font-size: 1em;
+      width: 100%;
+      font-family: 'Julius Sans One', sans-serif;
     }
   };
 };

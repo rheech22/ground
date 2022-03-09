@@ -38,7 +38,7 @@ export default class ImageTab extends Tab {
 
     const button = document.createElement('button');
     button.type = 'submit';
-    button.innerText = 'submit';
+    button.innerText = 'Add';
 
     this.modalForm.appendChild(button);
   }
@@ -47,8 +47,8 @@ export default class ImageTab extends Tab {
     if(inputValues.length === 2){
       if(!inputValues[0] || !inputValues[1]) return;
       this.images.push({
-        description: inputValues[0],
-        imageUrl: inputValues[1]
+        imageUrl: inputValues[0],
+        description: inputValues[1],
       });
       localStorage.setItem('images', JSON.stringify(this.images));
     };
@@ -61,10 +61,11 @@ export default class ImageTab extends Tab {
 
     this.images && this.images.map(element=> {
       const container = document.createElement('div');
-      const description = document.createElement('h6');
-      const image = document.createElement('img');
+      const image = document.createElement('div');
+      const description = document.createElement('p');
+      container.classList.add('image-container');
       description.innerHTML = element.description;
-      image.src = element.imageUrl;
+      image.style.backgroundImage = `url(${element.imageUrl})`;
       container.append(image, description);
       this.dataContainer.appendChild(container);
     });

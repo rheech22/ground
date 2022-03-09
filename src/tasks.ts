@@ -34,7 +34,7 @@ export default class TaskTab extends Tab {
     label3.htmlFor = 'background';
     label3.innerHTML = `
       Background-Color
-      <input type="color" id="background" value="#26de81"/>
+      <input type="color" id="background" value="#cc8e35"/>
     `;
     this.modalForm.prepend(label1, label2, label3);
     const button = document.createElement('button');

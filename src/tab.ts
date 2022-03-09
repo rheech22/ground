@@ -42,7 +42,7 @@ export default abstract class Tab {
           return
         };
         if(element.id === 'background'){
-          element.value = '#26de81';
+          element.value = '#cc8e35';
           return
         };
         element.value = '';

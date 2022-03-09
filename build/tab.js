@@ -39,7 +39,7 @@ export default class Tab {
                 }
                 ;
                 if (element.id === 'background') {
-                    element.value = '#26de81';
+                    element.value = '#cc8e35';
                     return;
                 }
                 ;

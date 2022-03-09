@@ -22,7 +22,13 @@ export default class Template extends HTMLElement {
         this.render();
     }
     ;
+    init() {
+        this.tabs[0].classList.add('active');
+        this.contents[0].setAttribute('slot', 'tab-content');
+        new tabs['tasks'](this.contents[0]);
+    }
     render() {
+        this.init();
         const handleClick = (i) => {
             this.selectTab(i);
         };
@@ -45,6 +51,12 @@ export default class Template extends HTMLElement {
                 if (name && tabs[name]) {
                     new tabs[name](content);
                 }
+            }
+        });
+        this.tabs.forEach((tab, index) => {
+            tab.classList.remove('active');
+            if (index === i) {
+                tab.classList.add('active');
             }
         });
     }
