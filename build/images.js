@@ -45,14 +45,20 @@ export default class ImageTab extends Tab {
     ;
     render() {
         this.dataContainer.innerHTML = '';
-        this.images && this.images.map(element => {
+        this.images && this.images.map((element, i) => {
             const container = document.createElement('div');
-            const image = document.createElement('div');
             const description = document.createElement('p');
+            const image = document.createElement('div');
+            container.append(image, description);
             container.classList.add('image-container');
             description.innerHTML = element.description;
             image.style.backgroundImage = `url(${element.imageUrl})`;
-            container.append(image, description);
+            this.setDraggable({
+                draggableList: container,
+                dataName: 'images',
+                dataIndex: i,
+                data: this.images
+            });
             this.dataContainer.appendChild(container);
         });
         this.element.appendChild(this.dataContainer);

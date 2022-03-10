@@ -85,11 +85,26 @@ h6 {
   font-weight: 600;
   margin: 0;
   margin-bottom: 1em;
-}
+};
 
 p {
   margin: 0;
-}
+};
+
+.draggable {
+  cursor: pointer;
+  transition: transform .3s ease-in-out;
+  &:hover{
+    transform: scale(1.02);
+  };
+  & > * {
+    pointer-events: none;
+  };
+};
+
+.over {
+  background-color: #718093 !important;
+};
 
 .active {
   background-color: white;

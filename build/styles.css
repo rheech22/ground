@@ -89,6 +89,21 @@ p {
   margin: 0;
 }
 
+.draggable {
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+.draggable:hover {
+  transform: scale(1.02);
+}
+.draggable > * {
+  pointer-events: none;
+}
+
+.over {
+  background-color: #718093 !important;
+}
+
 .active {
   background-color: white;
   color: black;

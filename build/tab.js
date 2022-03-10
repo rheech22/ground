@@ -9,6 +9,7 @@ export default class Tab {
             }
         };
         this.element = element;
+        this.dragStartIndex = null;
         this.dataContainer = this.element.querySelector('.data-container');
         this.addButton = this.element.querySelector('button');
         this.modal.addEventListener('click', handleCloseModal);
@@ -55,5 +56,37 @@ export default class Tab {
         });
     }
     ;
+    setDraggable({ draggableList, dataName, dataIndex, data }) {
+        draggableList.setAttribute('draggable', 'true');
+        draggableList.classList.add('draggable');
+        draggableList.setAttribute('data-index', dataIndex.toString());
+        draggableList.addEventListener('dragstart', ({ target }) => {
+            const targetElement = target;
+            this.dragStartIndex = parseInt(targetElement.getAttribute('data-index'), 10);
+        });
+        draggableList.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+        draggableList.addEventListener('dragenter', ({ target }) => {
+            const targetElement = target;
+            targetElement.classList.add('over');
+        });
+        draggableList.addEventListener('dragleave', ({ target }) => {
+            const targetElement = target;
+            targetElement.classList.remove('over');
+        });
+        draggableList.addEventListener('drop', ({ target }) => {
+            const targetElement = target;
+            const dragEndIndex = parseInt(targetElement.getAttribute('data-index'), 10);
+            if (typeof this.dragStartIndex === 'number') {
+                const tempData = data[this.dragStartIndex];
+                data[this.dragStartIndex] = data[dragEndIndex];
+                data[dragEndIndex] = tempData;
+                localStorage.setItem(dataName, JSON.stringify(data));
+                this.render();
+            }
+            ;
+        });
+    }
 }
 ;

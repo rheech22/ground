@@ -64,17 +64,27 @@ export default class VideoTab extends Tab {
   render(){
     this.dataContainer.innerHTML = '';
 
-    this.videos && this.videos.map(element=> {
+    this.videos && this.videos.map((element, i)=> {
       const container = document.createElement('div');
+
+      container.classList.add('video-container');
       container.innerHTML = `
       <div class="video-wrapper">
         <lite-youtube videoid=${element.videoId} posterloading></lite-youtube>
       </div>
       <p>${element.description}</p>
       `;
-      container.classList.add('video-container');
+      
+      this.setDraggable({
+          draggableList: container,
+          dataName: 'videos',
+          dataIndex: i,
+          data: this.videos
+      });
+      
       this.dataContainer.appendChild(container);
     });
+
 
     this.element.appendChild(this.dataContainer);
   }

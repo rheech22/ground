@@ -7,12 +7,10 @@ type Memo = {
 
 export default class MemoTab extends Tab {
   memos: Memo[];
-  dragStartIndex: number | null;
   
   constructor(element: HTMLElement){
     super(element);
-    const data = JSON.parse(localStorage.getItem('memos') as string);
-    this.memos = data || [];
+    this.memos = JSON.parse(localStorage.getItem('memos') as string) || [];
     this.dragStartIndex = null;
     this.modalForm.addEventListener('submit', this.handleClick);
     this.render();
@@ -65,55 +63,16 @@ export default class MemoTab extends Tab {
       const description = document.createElement('p');
       const title = document.createElement('h6');
 
-      container.setAttribute('draggable', 'true');
-      container.setAttribute('data-index', i.toString());
       container.append(title, description);
-
-      container.addEventListener('dragstart', ({target}: MouseEvent)=> {
-        const targetElement = target as HTMLDivElement;
-
-        const dragStartStringIndex = target instanceof HTMLDivElement ? targetElement.getAttribute('data-index')
-          : targetElement.parentElement!.getAttribute('data-index');
-
-        this.dragStartIndex = parseInt(dragStartStringIndex as string, 10);
-      });
-
-      container.addEventListener('dragover', (e)=> {
-        e.preventDefault();
-      });
-
-      container.addEventListener('dragenter', ({target}: MouseEvent)=> {
-        const targetElement = target as HTMLDivElement;
-        targetElement.classList.add('over');
-      });
-
-      container.addEventListener('dragleave', ({target}: MouseEvent)=> {
-        const targetElement = target as HTMLDivElement;
-        targetElement.classList.remove('over');
-      });
-
-      container.addEventListener('drop', ({target}: MouseEvent)=> {
-        const targetElement = target as HTMLDivElement;
-
-        const dragEndStringIndex = target instanceof HTMLDivElement ? targetElement.getAttribute('data-index')
-          : targetElement.parentElement!.getAttribute('data-index');
-
-        const dragEndIndex = parseInt(dragEndStringIndex as string, 10);
-
-        console.log(this.dragStartIndex, dragEndIndex);
-
-        if(typeof this.dragStartIndex === 'number'){
-          const temp = this.memos[this.dragStartIndex];
-          this.memos[this.dragStartIndex] = this.memos[dragEndIndex];
-          this.memos[dragEndIndex] = temp;
-          localStorage.setItem('memos', JSON.stringify(this.memos));
-          this.render();
-        };
-        
-      });
-
       description.innerHTML = element.description;
       title.innerHTML = element.title;
+
+      this.setDraggable({
+        draggableList: container,
+        dataName: 'memos',
+        dataIndex: i,
+        data: this.memos
+      });
 
       this.dataContainer.appendChild(container);
     });
