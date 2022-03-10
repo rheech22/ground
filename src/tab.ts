@@ -8,10 +8,16 @@ export default abstract class Tab {
   protected handleClick: (e:SubmitEvent) => void;
 
   constructor(element: HTMLElement){
+    const handleCloseModal = (e: MouseEvent) => {
+      if(e.currentTarget === e.target){
+        this.popDown();
+      }
+    };    
     this.element = element;
     this.dataContainer = this.element.querySelector('.data-container') as HTMLDivElement;
     this.addButton = this.element.querySelector('button') as HTMLButtonElement;
-    this.closeButton.addEventListener('click', this.popDown.bind(this));
+    this.modal.addEventListener('click', handleCloseModal);
+    this.closeButton.addEventListener('click', handleCloseModal);
     this.addButton.addEventListener('click', this.popUp.bind(this));
     this.handleClick = (e: SubmitEvent) => {
       e.preventDefault();

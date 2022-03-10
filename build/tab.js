@@ -3,10 +3,16 @@ export default class Tab {
         this.modal = document.querySelector('.modalWrapper');
         this.closeButton = document.getElementById('closeModal');
         this.modalForm = document.getElementById('modalForm');
+        const handleCloseModal = (e) => {
+            if (e.currentTarget === e.target) {
+                this.popDown();
+            }
+        };
         this.element = element;
         this.dataContainer = this.element.querySelector('.data-container');
         this.addButton = this.element.querySelector('button');
-        this.closeButton.addEventListener('click', this.popDown.bind(this));
+        this.modal.addEventListener('click', handleCloseModal);
+        this.closeButton.addEventListener('click', handleCloseModal);
         this.addButton.addEventListener('click', this.popUp.bind(this));
         this.handleClick = (e) => {
             e.preventDefault();

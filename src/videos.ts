@@ -1,7 +1,7 @@
 import Tab from './tab.js';
 
 type Video = {
-  title: string;
+  description: string;
   videoId: string;
 };
 
@@ -45,14 +45,14 @@ export default class VideoTab extends Tab {
   submit(inputValues: string[]){
     if(inputValues.length === 2){
       if(!inputValues[0] || !inputValues[1]) return;
-      const title = inputValues[0];
-      let videoId = inputValues[1].split('v=')[1];
+      let videoId = inputValues[0].split('v=')[1];
+      const description = inputValues[1];
       const ampersandIndex = videoId.indexOf('&');
       if(ampersandIndex !== -1) {
         videoId = videoId.substring(0, ampersandIndex);
       };
       this.videos.push({
-        title,
+        description,
         videoId
       });
       localStorage.setItem('videos', JSON.stringify(this.videos));
@@ -67,9 +67,12 @@ export default class VideoTab extends Tab {
     this.videos && this.videos.map(element=> {
       const container = document.createElement('div');
       container.innerHTML = `
-        <h6>${element.title}</h6>
+      <div class="video-wrapper">
         <lite-youtube videoid=${element.videoId} posterloading></lite-youtube>
+      </div>
+      <p>${element.description}</p>
       `;
+      container.classList.add('video-container');
       this.dataContainer.appendChild(container);
     });
 
