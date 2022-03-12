@@ -57,8 +57,8 @@ export default class Tab {
     }
     ;
     setDraggable({ draggableList, dataName, dataIndex, data }) {
-        draggableList.setAttribute('draggable', 'true');
         draggableList.classList.add('draggable');
+        draggableList.setAttribute('draggable', 'true');
         draggableList.setAttribute('data-index', dataIndex.toString());
         draggableList.addEventListener('dragstart', ({ target }) => {
             const targetElement = target;

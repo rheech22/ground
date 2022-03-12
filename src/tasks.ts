@@ -8,10 +8,14 @@ type Category = {
 
 export default class TaskTab extends Tab {
   categories: Category[];
+  selectedCategory: string;
+  tasks: string[];
     
   constructor(element: HTMLElement){
     super(element);
     this.categories = JSON.parse(localStorage.getItem('categories') as string) || [];
+    this.selectedCategory = this.categories.length ? this.categories[0].title : '';
+    this.tasks = this.selectedCategory ? JSON.parse(localStorage.getItem(this.selectedCategory) as string) : [];
     this.modalForm.addEventListener('submit', this.handleClick);
     this.render();
   };
@@ -41,6 +45,31 @@ export default class TaskTab extends Tab {
     button.innerText = 'Add';
     button.type = 'submit';
     this.modalForm.appendChild(button);
+  };
+
+  handleClickCategory(e: MouseEvent){
+    const button = e.target as HTMLButtonElement;
+    const category = button.innerText;
+
+    [...document.querySelectorAll('.selected')]
+      .forEach(element => element.classList.remove('selected'));
+    button.classList.add('selected');
+    
+    this.selectedCategory = category;
+
+    this.tasks = JSON.parse(localStorage.getItem(this.selectedCategory) as string) || [];
+  };
+
+  handleClickTaskSubmit(e: SubmitEvent){
+    e.preventDefault();
+    if(!this.selectedCategory) return;
+
+    const form = e.target as HTMLFormElement;
+    const input = form.elements[0] as HTMLInputElement;
+
+    this.tasks.push(input.value);
+    localStorage.setItem(this.selectedCategory, JSON.stringify(this.tasks));
+    input.value = '';    
   }
 
   submit(inputValues: string[]){
@@ -52,6 +81,7 @@ export default class TaskTab extends Tab {
         buttonColor: inputValues[2]
       });
       localStorage.setItem('categories', JSON.stringify(this.categories));
+      localStorage.setItem(inputValues[0], JSON.stringify([]));
     };
 
     this.popDown();
@@ -63,13 +93,36 @@ export default class TaskTab extends Tab {
 
     this.categories && this.categories.map(category=> {
       const button = document.createElement('button');
+
       button.type = 'button';
       button.innerHTML = category.title;
       button.style.color = category.fontColor;
       button.style.backgroundColor = category.buttonColor;
+      button.classList.add('categories');
+      button.addEventListener('click', this.handleClickCategory.bind(this));
+
+      if(category.title === this.selectedCategory){
+        button.classList.add('selected');
+      };
+
       this.dataContainer.appendChild(button);
     });
 
+    const form = document.createElement('form');   
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.placeholder = 'add task';
+    
+    const button = document.createElement('button');
+    button.type = 'submit';
+    button.innerText = 'Add';
+
+    form.append(input, button);
+    form.addEventListener('submit', this.handleClickTaskSubmit.bind(this));
+
+    this.dataContainer.appendChild(form);
+    
     this.element.appendChild(this.dataContainer);
   }
 };

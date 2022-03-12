@@ -58,7 +58,7 @@ export default abstract class Tab {
     })
   };
 
-  protected setDraggable({
+  protected setDraggable<T>({
     draggableList,
     dataName,
     dataIndex,
@@ -67,11 +67,11 @@ export default abstract class Tab {
     draggableList: HTMLDivElement,
     dataName: string,
     dataIndex: number,
-    data: any[]
+    data: T[]
   }){
 
-    draggableList.setAttribute('draggable', 'true');
     draggableList.classList.add('draggable');
+    draggableList.setAttribute('draggable', 'true');
     draggableList.setAttribute('data-index', dataIndex.toString());
 
     draggableList.addEventListener('dragstart', ({target}: MouseEvent)=> {
