@@ -58,6 +58,17 @@ export default abstract class Tab {
     })
   };
 
+  protected save<T>({name, data}: {
+    name: string,
+    data: T[],
+  }){
+    localStorage.setItem(name, JSON.stringify(data));
+  };
+
+  protected load(name: string) {
+    return JSON.parse(localStorage.getItem(name) as string);
+  };
+
   protected setDraggable<T>({
     draggableList,
     dataName,

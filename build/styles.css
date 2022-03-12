@@ -89,6 +89,17 @@ p {
   margin: 0;
 }
 
+.delete-button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: fit-content;
+  margin: 10px;
+  border: 1px solid black;
+  border-radius: 3px;
+  opacity: 0.3;
+}
+
 .selected {
   font-weight: 700;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px, rgba(0, 0, 0, 0.22) 0px 5px 3px;
@@ -101,12 +112,13 @@ p {
 .draggable:hover {
   transform: scale(1.02);
 }
-.draggable > * {
+.draggable > *:not(button) {
   pointer-events: none;
 }
 
 .over {
   background-color: #718093 !important;
+  color: white;
 }
 
 .active {
@@ -119,11 +131,12 @@ p {
   flex-direction: column;
   padding: 1em;
   background-color: #F6F6F6;
+  position: relative;
 }
 .data-container div + div {
   margin-top: 1em;
 }
-.data-container button {
+.data-container button:not(.delete-button) {
   border: none;
   border-radius: 0.3em;
   padding: 0.5em 1em;

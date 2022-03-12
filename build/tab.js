@@ -56,6 +56,14 @@ export default class Tab {
         });
     }
     ;
+    save({ name, data }) {
+        localStorage.setItem(name, JSON.stringify(data));
+    }
+    ;
+    load(name) {
+        return JSON.parse(localStorage.getItem(name));
+    }
+    ;
     setDraggable({ draggableList, dataName, dataIndex, data }) {
         draggableList.classList.add('draggable');
         draggableList.setAttribute('draggable', 'true');

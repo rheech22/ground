@@ -2,8 +2,7 @@ import Tab from './tab.js';
 export default class ImageTab extends Tab {
     constructor(element) {
         super(element);
-        const data = JSON.parse(localStorage.getItem('images'));
-        this.images = data || [];
+        this.images = this.load('images') || [];
         this.modalForm.addEventListener('submit', this.handleClick);
         this.render();
     }
@@ -28,6 +27,14 @@ export default class ImageTab extends Tab {
         button.innerText = 'Add';
         this.modalForm.appendChild(button);
     }
+    handleClickDeleteButton(e) {
+        const target = e.target;
+        const index = parseInt(target.parentElement?.getAttribute('data-index'), 10);
+        this.images = [...this.images.slice(0, index), ...this.images.slice(index + 1)];
+        this.save({ name: 'images', data: this.images });
+        this.render();
+    }
+    ;
     submit(inputValues) {
         if (inputValues.length === 2) {
             if (!inputValues[0] || !inputValues[1])
@@ -36,7 +43,7 @@ export default class ImageTab extends Tab {
                 imageUrl: inputValues[0],
                 description: inputValues[1],
             });
-            localStorage.setItem('images', JSON.stringify(this.images));
+            this.save({ name: 'images', data: this.images });
         }
         ;
         this.popDown();
@@ -49,10 +56,14 @@ export default class ImageTab extends Tab {
             const container = document.createElement('div');
             const description = document.createElement('p');
             const image = document.createElement('div');
-            container.append(image, description);
+            const button = document.createElement('button');
+            container.append(image, description, button);
             container.classList.add('image-container');
             description.innerHTML = element.description;
             image.style.backgroundImage = `url(${element.imageUrl})`;
+            button.innerHTML = 'Delete';
+            button.addEventListener('click', this.handleClickDeleteButton.bind(this));
+            button.classList.add('delete-button');
             this.setDraggable({
                 draggableList: container,
                 dataName: 'images',

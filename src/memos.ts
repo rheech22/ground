@@ -10,7 +10,7 @@ export default class MemoTab extends Tab {
   
   constructor(element: HTMLElement){
     super(element);
-    this.memos = JSON.parse(localStorage.getItem('memos') as string) || [];
+    this.memos = this.load('memos') || [];
     this.dragStartIndex = null;
     this.modalForm.addEventListener('submit', this.handleClick);
     this.render();
@@ -40,7 +40,15 @@ export default class MemoTab extends Tab {
     button.innerText = 'Add';
 
     this.modalForm.appendChild(button);
-  }
+  };
+
+  handleClickDeleteButton(e: MouseEvent){
+    const target = e.target as HTMLButtonElement;
+    const index = parseInt(target.parentElement?.getAttribute('data-index') as string, 10);
+    this.memos = [...this.memos.slice(0, index), ...this.memos.slice(index+1)];
+    this.save({name: 'memos', data: this.memos});
+    this.render();
+  };
 
   submit(inputValues: string[]){
     if(inputValues.length === 2){
@@ -49,7 +57,7 @@ export default class MemoTab extends Tab {
         title: inputValues[0],
         description: inputValues[1]
       });
-      localStorage.setItem('memos', JSON.stringify(this.memos));
+      this.save({name: 'memos', data: this.memos});
     };
     this.popDown();
     this.render();
@@ -62,10 +70,14 @@ export default class MemoTab extends Tab {
       const container = document.createElement('div');
       const description = document.createElement('p');
       const title = document.createElement('h6');
+      const button = document.createElement('button');
 
-      container.append(title, description);
+      container.append(title, description, button);
       description.innerHTML = element.description;
       title.innerHTML = element.title;
+      button.innerHTML = 'Delete';
+      button.addEventListener('click', this.handleClickDeleteButton.bind(this));
+      button.classList.add('delete-button');
 
       this.setDraggable({
         draggableList: container,

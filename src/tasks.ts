@@ -13,9 +13,9 @@ export default class TaskTab extends Tab {
     
   constructor(element: HTMLElement){
     super(element);
-    this.categories = JSON.parse(localStorage.getItem('categories') as string) || [];
+    this.categories = this.load('categories') || [];
     this.selectedCategory = this.categories.length ? this.categories[0].title : '';
-    this.tasks = this.selectedCategory ? JSON.parse(localStorage.getItem(this.selectedCategory) as string) : [];
+    this.tasks = this.selectedCategory ? this.load(this.selectedCategory) : [];
     this.modalForm.addEventListener('submit', this.handleClick);
     this.render();
   };
@@ -57,7 +57,7 @@ export default class TaskTab extends Tab {
     
     this.selectedCategory = category;
 
-    this.tasks = JSON.parse(localStorage.getItem(this.selectedCategory) as string) || [];
+    this.tasks = this.load(this.selectedCategory) || [];
     this.render();
   };
 
@@ -69,7 +69,7 @@ export default class TaskTab extends Tab {
     const input = form.elements[0] as HTMLInputElement;
 
     this.tasks.push(input.value);
-    localStorage.setItem(this.selectedCategory, JSON.stringify(this.tasks));
+    this.save({name: this.selectedCategory, data: this.tasks});
     input.value = '';
     this.render();
   }
@@ -82,8 +82,8 @@ export default class TaskTab extends Tab {
         fontColor: inputValues[1],
         buttonColor: inputValues[2]
       });
-      localStorage.setItem('categories', JSON.stringify(this.categories));
-      localStorage.setItem(inputValues[0], JSON.stringify([]));
+      this.save({name: 'categories', data: this.categories});
+      this.save({name: inputValues[0], data: []});
     };
 
     this.popDown();

@@ -10,8 +10,7 @@ export default class VideoTab extends Tab {
   
   constructor(element: HTMLElement){
     super(element);
-    const data = JSON.parse(localStorage.getItem('videos') as string);
-    this.videos = data || [];
+    this.videos = this.load('videos') || [];
     this.modalForm.addEventListener('submit', this.handleClick);
     this.render();
   };
@@ -40,7 +39,15 @@ export default class VideoTab extends Tab {
     button.innerText = 'Add';
 
     this.modalForm.appendChild(button);
-  }
+  };
+
+  handleClickDeleteButton(e: MouseEvent){
+    const target = e.target as HTMLButtonElement;
+    const index = parseInt(target.parentElement?.getAttribute('data-index') as string, 10);
+    this.videos = [...this.videos.slice(0, index), ...this.videos.slice(index+1)];
+    this.save({name: 'videos', data: this.videos});
+    this.render();
+  };
 
   submit(inputValues: string[]){
     if(inputValues.length === 2){
@@ -55,7 +62,7 @@ export default class VideoTab extends Tab {
         description,
         videoId
       });
-      localStorage.setItem('videos', JSON.stringify(this.videos));
+      this.save({name: 'videos', data: this.videos});
     };
     this.popDown();
     this.render();
@@ -66,20 +73,26 @@ export default class VideoTab extends Tab {
 
     this.videos && this.videos.map((element, i)=> {
       const container = document.createElement('div');
+      const button = document.createElement('button');
 
       container.classList.add('video-container');
       container.innerHTML = `
-      <div class="video-wrapper">
-        <lite-youtube videoid=${element.videoId} posterloading></lite-youtube>
-      </div>
-      <p>${element.description}</p>
+        <div class="video-wrapper">
+          <lite-youtube videoid=${element.videoId} posterloading></lite-youtube>
+        </div>
+        <p>${element.description}</p>
       `;
+
+      container.appendChild(button);
+      button.innerHTML = 'Delete';
+      button.addEventListener('click', this.handleClickDeleteButton.bind(this));
+      button.classList.add('delete-button');
       
       this.setDraggable({
-          draggableList: container,
-          dataName: 'videos',
-          dataIndex: i,
-          data: this.videos
+        draggableList: container,
+        dataName: 'videos',
+        dataIndex: i,
+        data: this.videos
       });
       
       this.dataContainer.appendChild(container);
