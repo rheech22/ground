@@ -64,7 +64,7 @@ export default abstract class Tab {
     dataIndex,
     data
   }: {
-    draggableList: HTMLDivElement,
+    draggableList: HTMLElement,
     dataName: string,
     dataIndex: number,
     data: T[]
@@ -75,7 +75,7 @@ export default abstract class Tab {
     draggableList.setAttribute('data-index', dataIndex.toString());
 
     draggableList.addEventListener('dragstart', ({target}: MouseEvent)=> {
-        const targetElement = target as HTMLDivElement;
+        const targetElement = target as HTMLElement;
 
         this.dragStartIndex = parseInt(targetElement.getAttribute('data-index') as string, 10);
       });
@@ -85,17 +85,17 @@ export default abstract class Tab {
     });
 
     draggableList.addEventListener('dragenter', ({target}: MouseEvent)=> {
-      const targetElement = target as HTMLDivElement;
+      const targetElement = target as HTMLElement;
       targetElement.classList.add('over');
     });
 
     draggableList.addEventListener('dragleave', ({target}: MouseEvent)=> {
-      const targetElement = target as HTMLDivElement;
+      const targetElement = target as HTMLElement;
       targetElement.classList.remove('over');
     });
 
     draggableList.addEventListener('drop', ({target}: MouseEvent)=> {
-      const targetElement = target as HTMLDivElement;
+      const targetElement = target as HTMLElement;
 
       const dragEndIndex = parseInt(targetElement.getAttribute('data-index') as string, 10);
 

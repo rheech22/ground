@@ -23,8 +23,8 @@ export default class ImageTab extends Tab {
     const label1 = document.createElement('label');
     label1.htmlFor = 'imageUrl';
     label1.innerHTML = `
-    URL
-    <input type="text" id='imageUrl' placeholder="Paste the image URL"/>    
+      URL
+      <input type="text" id='imageUrl' placeholder="Paste the image URL"/>    
     `;
     
     const label2 = document.createElement('label');

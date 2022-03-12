@@ -58,6 +58,7 @@ export default class TaskTab extends Tab {
     this.selectedCategory = category;
 
     this.tasks = JSON.parse(localStorage.getItem(this.selectedCategory) as string) || [];
+    this.render();
   };
 
   handleClickTaskSubmit(e: SubmitEvent){
@@ -69,7 +70,8 @@ export default class TaskTab extends Tab {
 
     this.tasks.push(input.value);
     localStorage.setItem(this.selectedCategory, JSON.stringify(this.tasks));
-    input.value = '';    
+    input.value = '';
+    this.render();
   }
 
   submit(inputValues: string[]){
@@ -120,9 +122,26 @@ export default class TaskTab extends Tab {
 
     form.append(input, button);
     form.addEventListener('submit', this.handleClickTaskSubmit.bind(this));
-
     this.dataContainer.appendChild(form);
-    
+
+    const ul = document.createElement('ul');
+    ul.classList.add('draggable-list');
+
+    this.tasks && this.tasks.map((task, i) => {
+      const li = document.createElement('li');
+      li.innerHTML = task;
+      ul.appendChild(li);
+
+      this.setDraggable({
+        draggableList: li,
+        dataName: this.selectedCategory,
+        dataIndex: i,
+        data: this.tasks
+      })
+    });
+
+    this.dataContainer.appendChild(ul);
+
     this.element.appendChild(this.dataContainer);
   }
 };
