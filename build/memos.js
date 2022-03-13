@@ -62,9 +62,10 @@ export default class MemoTab extends Tab {
             container.append(title, description, button);
             description.innerHTML = element.description;
             title.innerHTML = element.title;
-            button.innerHTML = 'Delete';
+            button.innerHTML = '␡';
             button.addEventListener('click', this.handleClickDeleteButton.bind(this));
             button.classList.add('delete-button');
+            button.setAttribute('draggable', 'false');
             this.setDraggable({
                 draggableList: container,
                 dataName: 'memos',

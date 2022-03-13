@@ -69,6 +69,10 @@ export default abstract class Tab {
     return JSON.parse(localStorage.getItem(name) as string);
   };
 
+  protected delete(name: string){
+    localStorage.removeItem(name);
+  }
+
   protected setDraggable<T>({
     draggableList,
     dataName,
@@ -87,7 +91,7 @@ export default abstract class Tab {
 
     draggableList.addEventListener('dragstart', ({target}: MouseEvent)=> {
         const targetElement = target as HTMLElement;
-
+        
         this.dragStartIndex = parseInt(targetElement.getAttribute('data-index') as string, 10);
       });
 
@@ -107,6 +111,11 @@ export default abstract class Tab {
 
     draggableList.addEventListener('drop', ({target}: MouseEvent)=> {
       const targetElement = target as HTMLElement;
+
+      if(targetElement instanceof HTMLButtonElement) {
+        this.render();
+        return;
+      };
 
       const dragEndIndex = parseInt(targetElement.getAttribute('data-index') as string, 10);
 

@@ -76,7 +76,7 @@ export default class ImageTab extends Tab {
       container.classList.add('image-container');
       description.innerHTML = element.description;
       image.style.backgroundImage = `url(${element.imageUrl})`;
-      button.innerHTML = 'Delete';
+      button.innerHTML = '␡';
       button.addEventListener('click', this.handleClickDeleteButton.bind(this));
       button.classList.add('delete-button');
 

@@ -71,7 +71,7 @@ export default class VideoTab extends Tab {
         <p>${element.description}</p>
       `;
             container.appendChild(button);
-            button.innerHTML = 'Delete';
+            button.innerHTML = '␡';
             button.addEventListener('click', this.handleClickDeleteButton.bind(this));
             button.classList.add('delete-button');
             this.setDraggable({

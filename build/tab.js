@@ -64,6 +64,9 @@ export default class Tab {
         return JSON.parse(localStorage.getItem(name));
     }
     ;
+    delete(name) {
+        localStorage.removeItem(name);
+    }
     setDraggable({ draggableList, dataName, dataIndex, data }) {
         draggableList.classList.add('draggable');
         draggableList.setAttribute('draggable', 'true');
@@ -85,6 +88,11 @@ export default class Tab {
         });
         draggableList.addEventListener('drop', ({ target }) => {
             const targetElement = target;
+            if (targetElement instanceof HTMLButtonElement) {
+                this.render();
+                return;
+            }
+            ;
             const dragEndIndex = parseInt(targetElement.getAttribute('data-index'), 10);
             if (typeof this.dragStartIndex === 'number') {
                 const tempData = data[this.dragStartIndex];

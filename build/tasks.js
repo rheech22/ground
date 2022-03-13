@@ -3,7 +3,7 @@ export default class TaskTab extends Tab {
     constructor(element) {
         super(element);
         this.categories = this.load('categories') || [];
-        this.selectedCategory = this.categories.length ? this.categories[0].title : '';
+        this.selectedCategory = this.categories && this.categories.length ? this.categories[0].title : '';
         this.tasks = this.selectedCategory ? this.load(this.selectedCategory) : [];
         this.modalForm.addEventListener('submit', this.handleClick);
         this.render();
@@ -53,9 +53,29 @@ export default class TaskTab extends Tab {
             return;
         const form = e.target;
         const input = form.elements[0];
+        if (!input.value)
+            return;
         this.tasks.push(input.value);
         this.save({ name: this.selectedCategory, data: this.tasks });
         input.value = '';
+        this.render();
+    }
+    ;
+    deleteTodo(e) {
+        const target = e.target;
+        const index = parseInt(target.parentElement?.getAttribute('data-index'), 10);
+        this.tasks = [...this.tasks.slice(0, index), ...this.tasks.slice(index + 1)];
+        this.save({ name: this.selectedCategory, data: this.tasks });
+        this.render();
+    }
+    ;
+    deleteLabel() {
+        this.categories = [...this.categories]
+            .filter(category => category.title !== this.selectedCategory);
+        this.save({ name: 'categories', data: this.categories });
+        this.delete(this.selectedCategory);
+        this.selectedCategory = this.categories.length ? this.categories[0].title : '';
+        this.tasks = this.selectedCategory ? this.load(this.selectedCategory) : [];
         this.render();
     }
     submit(inputValues) {
@@ -69,6 +89,8 @@ export default class TaskTab extends Tab {
             });
             this.save({ name: 'categories', data: this.categories });
             this.save({ name: inputValues[0], data: [] });
+            this.selectedCategory = inputValues[0];
+            this.tasks = this.load(this.selectedCategory);
         }
         ;
         this.popDown();
@@ -91,30 +113,50 @@ export default class TaskTab extends Tab {
             ;
             this.dataContainer.appendChild(button);
         });
-        const form = document.createElement('form');
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.placeholder = 'add task';
-        const button = document.createElement('button');
-        button.type = 'submit';
-        button.innerText = 'Add';
-        form.append(input, button);
-        form.addEventListener('submit', this.handleClickTaskSubmit.bind(this));
-        this.dataContainer.appendChild(form);
-        const ul = document.createElement('ul');
-        ul.classList.add('draggable-list');
-        this.tasks && this.tasks.map((task, i) => {
-            const li = document.createElement('li');
-            li.innerHTML = task;
-            ul.appendChild(li);
-            this.setDraggable({
-                draggableList: li,
-                dataName: this.selectedCategory,
-                dataIndex: i,
-                data: this.tasks
+        if (this.categories && !this.categories.length) {
+            const message = document.createElement('span');
+            message.innerText = 'Add a label first';
+            this.dataContainer.appendChild(message);
+        }
+        ;
+        if (this.categories && this.categories.length) {
+            const form = document.createElement('form');
+            form.classList.add('todo-form');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = 'what are u gonna do?';
+            const button = document.createElement('button');
+            button.type = 'submit';
+            button.innerText = 'Add task';
+            form.append(input, button);
+            form.addEventListener('submit', this.handleClickTaskSubmit.bind(this));
+            this.dataContainer.appendChild(form);
+            const ul = document.createElement('ul');
+            ul.classList.add('draggable-list');
+            this.tasks && this.tasks.map((task, i) => {
+                const li = document.createElement('li');
+                const button = document.createElement('button');
+                li.innerHTML = task;
+                li.appendChild(button);
+                li.classList.add('todo');
+                button.innerHTML = '␡';
+                button.addEventListener('click', this.deleteTodo.bind(this));
+                ul.appendChild(li);
+                this.setDraggable({
+                    draggableList: li,
+                    dataName: this.selectedCategory,
+                    dataIndex: i,
+                    data: this.tasks
+                });
             });
-        });
-        this.dataContainer.appendChild(ul);
+            this.dataContainer.appendChild(ul);
+            const deleteLabelButton = document.createElement('button');
+            deleteLabelButton.innerText = 'Remove this label';
+            deleteLabelButton.classList.add('delete-label-button');
+            deleteLabelButton.addEventListener('click', this.deleteLabel.bind(this));
+            this.dataContainer.appendChild(deleteLabelButton);
+        }
+        ;
         this.element.appendChild(this.dataContainer);
     }
 }

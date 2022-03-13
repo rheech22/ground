@@ -89,15 +89,74 @@ p {
   margin: 0;
 }
 
+ul {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2em 0;
+  padding: 0;
+  width: 100%;
+}
+
+.todo-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2em;
+  width: 100%;
+  font-size: 1em;
+}
+.todo-form > input {
+  margin-right: 1em;
+  padding-left: 1em;
+  outline: unset;
+  border: none;
+  border-radius: 3px;
+  width: 280px;
+  height: 3em;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px 0px inset;
+}
+.todo-form > button {
+  background: #54a0ff;
+  border: none;
+  border-radius: 3px;
+  height: 3em;
+  color: white;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 2px, rgba(0, 0, 0, 0.2) 0px 3px 5px -3px, rgba(0, 0, 0, 0.1) 0px -1px 0px inset;
+}
+
+.todo {
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  padding: 1px 10px;
+  width: 300px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  margin-bottom: 1em;
+  font-size: 10px;
+}
+.todo button {
+  margin-left: auto !important;
+  background: none;
+  border: none;
+  font-size: 3em;
+  opacity: 0.5;
+}
+.todo button:hover {
+  color: red;
+}
+
 .delete-button {
   position: absolute;
   bottom: 0;
   right: 0;
-  width: fit-content;
-  margin: 10px;
-  border: 1px solid black;
-  border-radius: 3px;
-  opacity: 0.3;
+  border: none;
+  background: none;
+  opacity: 0.5;
+  font-size: 2em;
+}
+.delete-button:hover {
+  color: red;
 }
 
 .selected {
@@ -136,7 +195,7 @@ p {
 .data-container div + div {
   margin-top: 1em;
 }
-.data-container button:not(.delete-button) {
+.data-container > button {
   border: none;
   border-radius: 0.3em;
   padding: 0.5em 1em;
