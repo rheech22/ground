@@ -7,16 +7,16 @@ type Memo = {
 
 export default class MemoTab extends Tab {
   memos: Memo[];
-  
-  constructor(element: HTMLElement){
+
+  constructor(element: HTMLElement) {
     super(element);
-    this.memos = this.load('memos') || [];
+    this.memos = this.loadFromLocal('memos') || [];
     this.dragStartIndex = null;
     this.modalForm.addEventListener('submit', this.handleClick);
     this.render();
-  };
+  }
 
-  setModalInputs(){
+  setModalInputs() {
     this.modalForm.innerHTML = '';
 
     const label1 = document.createElement('label');
@@ -40,33 +40,33 @@ export default class MemoTab extends Tab {
     button.innerText = 'Add';
 
     this.modalForm.appendChild(button);
-  };
+  }
 
-  handleClickDeleteButton(e: MouseEvent){
+  handleClickDeleteButton(e: MouseEvent) {
     const target = e.target as HTMLButtonElement;
     const index = parseInt(target.parentElement?.getAttribute('data-index') as string, 10);
-    this.memos = [...this.memos.slice(0, index), ...this.memos.slice(index+1)];
-    this.save({name: 'memos', data: this.memos});
+    this.memos = [...this.memos.slice(0, index), ...this.memos.slice(index + 1)];
+    this.saveToLocal({ name: 'memos', data: this.memos });
     this.render();
-  };
+  }
 
-  submit(inputValues: string[]){
-    if(inputValues.length === 2){
-      if(!inputValues[0] || !inputValues[1]) return;
+  submit(inputValues: string[]) {
+    if (inputValues.length === 2) {
+      if (!inputValues[0] || !inputValues[1]) return;
       this.memos.push({
         title: inputValues[0],
-        description: inputValues[1]
+        description: inputValues[1],
       });
-      this.save({name: 'memos', data: this.memos});
-    };
+      this.saveToLocal({ name: 'memos', data: this.memos });
+    }
     this.popDown();
     this.render();
-  };
+  }
 
-  render(){
-    this.dataContainer.innerHTML = '';  
+  render() {
+    this.dataContainer.innerHTML = '';
 
-    this.memos && this.memos.map((element, i)=> {
+    this.memos && this.memos.forEach((element, i) => {
       const container = document.createElement('div');
       const description = document.createElement('p');
       const title = document.createElement('h6');
@@ -84,7 +84,7 @@ export default class MemoTab extends Tab {
         draggableList: container,
         dataName: 'memos',
         dataIndex: i,
-        data: this.memos
+        data: this.memos,
       });
 
       this.dataContainer.appendChild(container);
@@ -92,4 +92,4 @@ export default class MemoTab extends Tab {
 
     this.element.appendChild(this.dataContainer);
   }
-};
+}

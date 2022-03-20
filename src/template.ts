@@ -1,7 +1,7 @@
-import TaskTab from "./tasks.js";
-import MemoTab from "./memos.js";
-import ImageTab from "./images.js";
-import VideoTab from "./videos.js";
+import TaskTab from './tasks.js';
+import MemoTab from './memos.js';
+import ImageTab from './images.js';
+import VideoTab from './videos.js';
 
 type Tabs = typeof MemoTab | typeof TaskTab | typeof ImageTab | typeof VideoTab;
 
@@ -9,51 +9,54 @@ const tabs: {[key: string]: Tabs} = {
   tasks: TaskTab,
   memos: MemoTab,
   images: ImageTab,
-  videos: VideoTab
+  videos: VideoTab,
 };
 
 export default class Template extends HTMLElement {
   tabs: NodeListOf<HTMLButtonElement>;
+
   contents: NodeListOf<HTMLElement>;
+
   template: HTMLTemplateElement = document.getElementById('template') as HTMLTemplateElement;
 
-  constructor() { 
+  form: HTMLFormElement = document.getElementById('modalForm') as HTMLFormElement;
+
+  constructor() {
     super();
 
-    this.attachShadow({mode: 'open'})
-        .appendChild(this.template.content.cloneNode(true));
-    
+    this.attachShadow({ mode: 'open' })
+      .appendChild(this.template.content.cloneNode(true));
+
     this.tabs = this.querySelectorAll('.tabs');
     this.contents = this.querySelectorAll('section');
-  };
-  
-  connectedCallback() {
-    this.render();
-  };
-
-  init(){
-    this.tabs[0].classList.add('active');
-    this.contents[0].setAttribute('slot', 'tab-content');
-    new tabs['tasks'](this.contents[0]);
   }
 
-  render(){
+  connectedCallback() {
+    this.render();
+  }
+
+  init() {
+    this.tabs[0].classList.add('active');
+    this.contents[0].setAttribute('slot', 'tab-content');
+    new tabs.tasks(this.contents[0]);
+  }
+
+  render() {
     this.init();
-    
+
     const handleClick = (i: number) => {
       this.selectTab(i);
-    }
-    
-    this.tabs.forEach((tab, i)=> tab.addEventListener('click', () => handleClick(i)));
-  };
+    };
 
-  detachListeners(){
-    const form = document.getElementById('modalForm') as HTMLFormElement;
-    const clone = form.cloneNode(true);
-    form.parentNode?.replaceChild(clone, form);
-  };
+    this.tabs.forEach((tab, i) => tab.addEventListener('click', () => handleClick(i)));
+  }
 
-  selectTab(i: number){
+  private detachListeners() {
+    const clone = this.form.cloneNode(true);
+    this.form.parentNode?.replaceChild(clone, this.form);
+  }
+
+  selectTab(i: number) {
     this.contents.forEach((content, index) => {
       content.removeAttribute('slot');
 
@@ -63,17 +66,17 @@ export default class Template extends HTMLElement {
         this.detachListeners();
 
         const { name } = content.dataset;
-        if(name && tabs[name]) {
+        if (name && tabs[name]) {
           new tabs[name](content);
         }
       }
     });
-    this.tabs.forEach((tab, index)=> {
+    this.tabs.forEach((tab, index) => {
       tab.classList.remove('active');
 
-      if(index === i) {
+      if (index === i) {
         tab.classList.add('active');
       }
     });
   }
-};
+}

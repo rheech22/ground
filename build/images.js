@@ -2,11 +2,10 @@ import Tab from './tab.js';
 export default class ImageTab extends Tab {
     constructor(element) {
         super(element);
-        this.images = this.load('images') || [];
+        this.images = this.loadFromLocal('images') || [];
         this.modalForm.addEventListener('submit', this.handleClick);
         this.render();
     }
-    ;
     setModalInputs() {
         this.modalForm.innerHTML = '';
         const label1 = document.createElement('label');
@@ -31,10 +30,9 @@ export default class ImageTab extends Tab {
         const target = e.target;
         const index = parseInt(target.parentElement?.getAttribute('data-index'), 10);
         this.images = [...this.images.slice(0, index), ...this.images.slice(index + 1)];
-        this.save({ name: 'images', data: this.images });
+        this.saveToLocal({ name: 'images', data: this.images });
         this.render();
     }
-    ;
     submit(inputValues) {
         if (inputValues.length === 2) {
             if (!inputValues[0] || !inputValues[1])
@@ -43,16 +41,14 @@ export default class ImageTab extends Tab {
                 imageUrl: inputValues[0],
                 description: inputValues[1],
             });
-            this.save({ name: 'images', data: this.images });
+            this.saveToLocal({ name: 'images', data: this.images });
         }
-        ;
         this.popDown();
         this.render();
     }
-    ;
     render() {
         this.dataContainer.innerHTML = '';
-        this.images && this.images.map((element, i) => {
+        this.images && this.images.forEach((element, i) => {
             const container = document.createElement('div');
             const description = document.createElement('p');
             const image = document.createElement('div');
@@ -68,11 +64,10 @@ export default class ImageTab extends Tab {
                 draggableList: container,
                 dataName: 'images',
                 dataIndex: i,
-                data: this.images
+                data: this.images,
             });
             this.dataContainer.appendChild(container);
         });
         this.element.appendChild(this.dataContainer);
     }
 }
-;

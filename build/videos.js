@@ -2,18 +2,17 @@ import Tab from './tab.js';
 export default class VideoTab extends Tab {
     constructor(element) {
         super(element);
-        this.videos = this.load('videos') || [];
+        this.videos = this.loadFromLocal('videos') || [];
         this.modalForm.addEventListener('submit', this.handleClick);
         this.render();
     }
-    ;
     setModalInputs() {
         this.modalForm.innerHTML = '';
         const label1 = document.createElement('label');
         label1.htmlFor = 'videoUrl';
         label1.innerHTML = `
-    URL
-    <input type="text" id='videoUrl' placeholder="Paste the video URL"/>    
+      URL
+      <input type="text" id='videoUrl' placeholder="Paste the video URL"/>    
     `;
         const label2 = document.createElement('label');
         label2.htmlFor = 'description';
@@ -27,15 +26,13 @@ export default class VideoTab extends Tab {
         button.innerText = 'Add';
         this.modalForm.appendChild(button);
     }
-    ;
     handleClickDeleteButton(e) {
         const target = e.target;
         const index = parseInt(target.parentElement?.getAttribute('data-index'), 10);
         this.videos = [...this.videos.slice(0, index), ...this.videos.slice(index + 1)];
-        this.save({ name: 'videos', data: this.videos });
+        this.saveToLocal({ name: 'videos', data: this.videos });
         this.render();
     }
-    ;
     submit(inputValues) {
         if (inputValues.length === 2) {
             if (!inputValues[0] || !inputValues[1])
@@ -46,21 +43,18 @@ export default class VideoTab extends Tab {
             if (ampersandIndex !== -1) {
                 videoId = videoId.substring(0, ampersandIndex);
             }
-            ;
             this.videos.push({
                 description,
-                videoId
+                videoId,
             });
-            this.save({ name: 'videos', data: this.videos });
+            this.saveToLocal({ name: 'videos', data: this.videos });
         }
-        ;
         this.popDown();
         this.render();
     }
-    ;
     render() {
         this.dataContainer.innerHTML = '';
-        this.videos && this.videos.map((element, i) => {
+        this.videos && this.videos.forEach((element, i) => {
             const container = document.createElement('div');
             const button = document.createElement('button');
             container.classList.add('video-container');
@@ -78,11 +72,10 @@ export default class VideoTab extends Tab {
                 draggableList: container,
                 dataName: 'videos',
                 dataIndex: i,
-                data: this.videos
+                data: this.videos,
             });
             this.dataContainer.appendChild(container);
         });
         this.element.appendChild(this.dataContainer);
     }
 }
-;

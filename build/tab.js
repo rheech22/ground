@@ -1,4 +1,4 @@
-import { LABEL_BACKGROUND, LABEL_FONT } from "./constants/colors.js";
+import { LABEL_BACKGROUND, LABEL_FONT } from './constants/colors.js';
 export default class Tab {
     constructor(element) {
         this.modal = document.querySelector('.modalWrapper');
@@ -18,57 +18,42 @@ export default class Tab {
         this.addButton.addEventListener('click', this.popUp.bind(this));
         this.handleClick = (e) => {
             e.preventDefault();
-            let inputValues = [];
+            const inputValues = [];
             if (e.target instanceof HTMLFormElement) {
-                [...e.target.elements].forEach(element => {
-                    if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
-                        inputValues.push(element.value);
+                [...e.target.elements].forEach((el) => {
+                    if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+                        inputValues.push(el.value);
                     }
                 });
             }
-            ;
             this.submit(inputValues);
         };
+        this.saveToLocal = ({ name, data }) => localStorage.setItem(name, JSON.stringify(data));
+        this.loadFromLocal = (name) => JSON.parse(localStorage.getItem(name));
+        this.deleteFromLocal = (name) => localStorage.removeItem(name);
         this.setModalInputs();
         this.render();
     }
-    ;
     popUp() {
         this.modal.style.display = 'flex';
     }
-    ;
     popDown() {
         this.modal.style.display = 'none';
-        [...this.modalForm.elements].forEach(element => {
+        [...this.modalForm.elements].forEach((element) => {
             if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
                 if (element.id === 'font') {
                     element.value = LABEL_FONT;
                     return;
                 }
-                ;
                 if (element.id === 'background') {
                     element.value = LABEL_BACKGROUND;
                     return;
                 }
-                ;
                 element.value = '';
             }
-            ;
         });
     }
-    ;
-    save({ name, data }) {
-        localStorage.setItem(name, JSON.stringify(data));
-    }
-    ;
-    load(name) {
-        return JSON.parse(localStorage.getItem(name));
-    }
-    ;
-    delete(name) {
-        localStorage.removeItem(name);
-    }
-    setDraggable({ draggableList, dataName, dataIndex, data }) {
+    setDraggable({ draggableList, dataName, dataIndex, data, }) {
         draggableList.classList.add('draggable');
         draggableList.setAttribute('draggable', 'true');
         draggableList.setAttribute('data-index', dataIndex.toString());
@@ -92,7 +77,6 @@ export default class Tab {
             if (!targetElement.classList.contains('draggable')) {
                 return;
             }
-            ;
             const dragEndIndex = parseInt(targetElement.getAttribute('data-index'), 10);
             if (typeof this.dragStartIndex === 'number') {
                 const tempData = data[this.dragStartIndex];
@@ -101,8 +85,6 @@ export default class Tab {
                 localStorage.setItem(dataName, JSON.stringify(data));
                 this.render();
             }
-            ;
         });
     }
 }
-;

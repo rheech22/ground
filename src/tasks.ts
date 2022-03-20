@@ -10,19 +10,21 @@ type Category = {
 
 export default class TaskTab extends Tab {
   categories: Category[];
+
   selectedCategory: string;
+
   tasks: string[];
-    
-  constructor(element: HTMLElement){
+
+  constructor(element: HTMLElement) {
     super(element);
-    this.categories = this.load('categories') || [];
+    this.categories = this.loadFromLocal('categories') || [];
     this.selectedCategory = this.categories && this.categories.length ? this.categories[0].title : '';
-    this.tasks = this.selectedCategory ? this.load(this.selectedCategory) : [];
+    this.tasks = this.selectedCategory ? this.loadFromLocal(this.selectedCategory) : [];
     this.modalForm.addEventListener('submit', this.handleClick);
     this.render();
-  };
+  }
 
-  setModalInputs(){
+  setModalInputs() {
     this.modalForm.innerHTML = '';
     const label1 = document.createElement('label');
     label1.htmlFor = 'category';
@@ -47,84 +49,84 @@ export default class TaskTab extends Tab {
     button.innerText = 'Add';
     button.type = 'submit';
     this.modalForm.appendChild(button);
-  };
+  }
 
-  handleClickCategory(e: MouseEvent){
+  handleClickCategory(e: MouseEvent) {
     const button = e.target as HTMLButtonElement;
     const category = button.innerText;
 
     [...document.querySelectorAll('.selected')]
-      .forEach(element => element.classList.remove('selected'));
+      .forEach((element) => element.classList.remove('selected'));
     button.classList.add('selected');
-    
+
     this.selectedCategory = category;
 
-    this.tasks = this.load(this.selectedCategory) || [];
+    this.tasks = this.loadFromLocal(this.selectedCategory) || [];
     this.render();
-  };
+  }
 
-  handleClickTaskSubmit(e: SubmitEvent){
+  handleClickTaskSubmit(e: SubmitEvent) {
     e.preventDefault();
-    if(!this.selectedCategory) return;
+    if (!this.selectedCategory) return;
 
     const form = e.target as HTMLFormElement;
     const input = form.elements[0] as HTMLInputElement;
 
-    if(!input.value) return;
+    if (!input.value) return;
 
     this.tasks.push(input.value);
-    this.save({name: this.selectedCategory, data: this.tasks});
+    this.saveToLocal({ name: this.selectedCategory, data: this.tasks });
     input.value = '';
     this.render();
-  };
+  }
 
-  deleteTodo(e:MouseEvent){
+  deleteTodo(e:MouseEvent) {
     const target = e.target as HTMLButtonElement;
     const index = parseInt(target.parentElement?.getAttribute('data-index') as string, 10);
-    this.tasks = [...this.tasks.slice(0, index), ...this.tasks.slice(index+1)];
-    this.save({name: this.selectedCategory, data: this.tasks});
+    this.tasks = [...this.tasks.slice(0, index), ...this.tasks.slice(index + 1)];
+    this.saveToLocal({ name: this.selectedCategory, data: this.tasks });
     this.render();
-  };
+  }
 
-  deleteLabel(){
+  deleteLabel() {
     this.categories = [...this.categories]
-      .filter(category => category.title !== this.selectedCategory);
-    this.save({name: 'categories', data: this.categories});
-    this.delete(this.selectedCategory);
+      .filter((category) => category.title !== this.selectedCategory);
+    this.saveToLocal({ name: 'categories', data: this.categories });
+    this.deleteFromLocal(this.selectedCategory);
     this.selectedCategory = this.categories.length ? this.categories[0].title : '';
-    this.tasks = this.selectedCategory ? this.load(this.selectedCategory) : [];
+    this.tasks = this.selectedCategory ? this.loadFromLocal(this.selectedCategory) : [];
     this.render();
-  }  
+  }
 
-  submit(inputValues: string[]){
-    if(inputValues.length === 3){
-      const [ title, fontColor, buttonColor ] = inputValues;
-      if(!title) return;
-      
-      if([...this.categories].find((category)=> category.title === title)){
+  submit(inputValues: string[]) {
+    if (inputValues.length === 3) {
+      const [title, fontColor, buttonColor] = inputValues;
+      if (!title) return;
+
+      if ([...this.categories].find((category) => category.title === title)) {
         alert('This label already exists...');
         return;
-      };
+      }
 
       this.categories.push({
         title,
         fontColor,
-        buttonColor
+        buttonColor,
       });
-      this.save({name: 'categories', data: this.categories});
-      this.save({name: title, data: []});
+      this.saveToLocal({ name: 'categories', data: this.categories });
+      this.saveToLocal({ name: title, data: [] });
       this.selectedCategory = title;
-      this.tasks = this.load(this.selectedCategory);
-    };
+      this.tasks = this.loadFromLocal(this.selectedCategory);
+    }
 
     this.popDown();
     this.render();
-  };
+  }
 
-  render(){
+  render() {
     this.dataContainer.innerHTML = '';
 
-    this.categories && this.categories.map(category=> {
+    this.categories && this.categories.forEach((category) => {
       const button = document.createElement('button');
 
       button.type = 'button';
@@ -134,28 +136,28 @@ export default class TaskTab extends Tab {
       button.classList.add('categories');
       button.addEventListener('click', this.handleClickCategory.bind(this));
 
-      if(category.title === this.selectedCategory){
+      if (category.title === this.selectedCategory) {
         button.classList.add('selected');
-      };
+      }
 
       this.dataContainer.appendChild(button);
     });
 
-    if (this.categories && !this.categories.length){
+    if (this.categories && !this.categories.length) {
       const message = document.createElement('span');
-      message.innerText = 'Add a label first'
+      message.innerText = 'Add a label first';
       this.dataContainer.appendChild(message);
-    };
+    }
 
-    if (this.categories && this.categories.length){
-      const form = document.createElement('form');   
+    if (this.categories && this.categories.length) {
+      const form = document.createElement('form');
       form.classList.add('todo-form');
 
       const input = document.createElement('input');
       input.type = 'text';
       input.placeholder = 'what are u gonna do?';
       input.autofocus = true;
-      
+
       const button = document.createElement('button');
       button.type = 'submit';
       button.innerText = '+';
@@ -167,15 +169,15 @@ export default class TaskTab extends Tab {
       const ul = document.createElement('ul');
       ul.classList.add('draggable-list');
 
-      this.tasks && this.tasks.map((task, i) => {
+      this.tasks && this.tasks.forEach((task, i) => {
         const li = document.createElement('li');
-        const button = document.createElement('button');
+        const deleteButton = document.createElement('button');
         li.innerHTML = task;
-        li.appendChild(button);
+        li.appendChild(deleteButton);
         li.classList.add('todo');
 
-        button.innerHTML = '␡';
-        button.addEventListener('click', this.deleteTodo.bind(this));     
+        deleteButton.innerHTML = '␡';
+        deleteButton.addEventListener('click', this.deleteTodo.bind(this));
 
         ul.appendChild(li);
 
@@ -183,25 +185,24 @@ export default class TaskTab extends Tab {
           draggableList: li,
           dataName: this.selectedCategory,
           dataIndex: i,
-          data: this.tasks
-        })
+          data: this.tasks,
+        });
       });
 
       this.dataContainer.appendChild(ul);
-      
+
       const deleteLabelContainer = document.createElement('div');
       const deleteLabelButton = document.createElement('button');
 
       deleteLabelContainer.classList.add('delete-label-container');
       deleteLabelContainer.appendChild(deleteLabelButton);
-      
+
       deleteLabelButton.innerText = `Remove the label: ${this.selectedCategory}`;
       deleteLabelButton.addEventListener('click', this.deleteLabel.bind(this));
-      
-      this.dataContainer.appendChild(deleteLabelContainer);
-    };
 
+      this.dataContainer.appendChild(deleteLabelContainer);
+    }
 
     this.element.appendChild(this.dataContainer);
   }
-};
+}

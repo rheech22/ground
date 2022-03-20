@@ -1,31 +1,30 @@
-import TaskTab from "./tasks.js";
-import MemoTab from "./memos.js";
-import ImageTab from "./images.js";
-import VideoTab from "./videos.js";
+import TaskTab from './tasks.js';
+import MemoTab from './memos.js';
+import ImageTab from './images.js';
+import VideoTab from './videos.js';
 const tabs = {
     tasks: TaskTab,
     memos: MemoTab,
     images: ImageTab,
-    videos: VideoTab
+    videos: VideoTab,
 };
 export default class Template extends HTMLElement {
     constructor() {
         super();
         this.template = document.getElementById('template');
+        this.form = document.getElementById('modalForm');
         this.attachShadow({ mode: 'open' })
             .appendChild(this.template.content.cloneNode(true));
         this.tabs = this.querySelectorAll('.tabs');
         this.contents = this.querySelectorAll('section');
     }
-    ;
     connectedCallback() {
         this.render();
     }
-    ;
     init() {
         this.tabs[0].classList.add('active');
         this.contents[0].setAttribute('slot', 'tab-content');
-        new tabs['tasks'](this.contents[0]);
+        new tabs.tasks(this.contents[0]);
     }
     render() {
         this.init();
@@ -34,13 +33,10 @@ export default class Template extends HTMLElement {
         };
         this.tabs.forEach((tab, i) => tab.addEventListener('click', () => handleClick(i)));
     }
-    ;
     detachListeners() {
-        const form = document.getElementById('modalForm');
-        const clone = form.cloneNode(true);
-        form.parentNode?.replaceChild(clone, form);
+        const clone = this.form.cloneNode(true);
+        this.form.parentNode?.replaceChild(clone, this.form);
     }
-    ;
     selectTab(i) {
         this.contents.forEach((content, index) => {
             content.removeAttribute('slot');
@@ -61,4 +57,3 @@ export default class Template extends HTMLElement {
         });
     }
 }
-;
