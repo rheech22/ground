@@ -13,13 +13,13 @@ const tabs: {[key: string]: Tabs} = {
 };
 
 export default class Template extends HTMLElement {
-  tabs: NodeListOf<HTMLButtonElement>;
+  private tabs: NodeListOf<HTMLButtonElement>;
 
-  contents: NodeListOf<HTMLElement>;
+  private contents: NodeListOf<HTMLElement>;
 
-  template: HTMLTemplateElement = document.getElementById('template') as HTMLTemplateElement;
+  private template: HTMLTemplateElement = document.getElementById('template') as HTMLTemplateElement;
 
-  form: HTMLFormElement = document.getElementById('modalForm') as HTMLFormElement;
+  private form: HTMLFormElement = document.getElementById('modalForm') as HTMLFormElement;
 
   constructor() {
     super();
@@ -31,17 +31,17 @@ export default class Template extends HTMLElement {
     this.contents = this.querySelectorAll('section');
   }
 
-  connectedCallback() {
+  private connectedCallback() {
     this.render();
   }
 
-  init() {
+  private init() {
     this.tabs[0].classList.add('active');
     this.contents[0].setAttribute('slot', 'tab-content');
     new tabs.tasks(this.contents[0]);
   }
 
-  render() {
+  private render() {
     this.init();
 
     const handleClick = (i: number) => {
@@ -56,7 +56,7 @@ export default class Template extends HTMLElement {
     this.form.parentNode?.replaceChild(clone, this.form);
   }
 
-  selectTab(i: number) {
+  private selectTab(i: number) {
     this.contents.forEach((content, index) => {
       content.removeAttribute('slot');
 

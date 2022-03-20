@@ -6,7 +6,7 @@ type Memo = {
 };
 
 export default class MemoTab extends Tab {
-  memos: Memo[];
+  private memos: Memo[];
 
   constructor(element: HTMLElement) {
     super(element);
@@ -16,7 +16,7 @@ export default class MemoTab extends Tab {
     this.render();
   }
 
-  setModalInputs() {
+  protected setModalInputs() {
     this.modalForm.innerHTML = '';
 
     const label1 = document.createElement('label');
@@ -42,7 +42,7 @@ export default class MemoTab extends Tab {
     this.modalForm.appendChild(button);
   }
 
-  handleClickDeleteButton(e: MouseEvent) {
+  private handleClickDeleteButton(e: MouseEvent) {
     const target = e.target as HTMLButtonElement;
     const index = parseInt(target.parentElement?.getAttribute('data-index') as string, 10);
     this.memos = [...this.memos.slice(0, index), ...this.memos.slice(index + 1)];
@@ -50,7 +50,7 @@ export default class MemoTab extends Tab {
     this.render();
   }
 
-  submit(inputValues: string[]) {
+  protected submit(inputValues: string[]) {
     if (inputValues.length === 2) {
       if (!inputValues[0] || !inputValues[1]) return;
       this.memos.push({
@@ -63,7 +63,7 @@ export default class MemoTab extends Tab {
     this.render();
   }
 
-  render() {
+  protected render() {
     this.dataContainer.innerHTML = '';
 
     this.memos && this.memos.forEach((element, i) => {

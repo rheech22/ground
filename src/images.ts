@@ -6,7 +6,7 @@ type Image = {
 };
 
 export default class ImageTab extends Tab {
-  images: Image[];
+  private images: Image[];
 
   constructor(element: HTMLElement) {
     super(element);
@@ -15,7 +15,7 @@ export default class ImageTab extends Tab {
     this.render();
   }
 
-  setModalInputs() {
+  protected setModalInputs() {
     this.modalForm.innerHTML = '';
 
     const label1 = document.createElement('label');
@@ -41,7 +41,7 @@ export default class ImageTab extends Tab {
     this.modalForm.appendChild(button);
   }
 
-  handleClickDeleteButton(e: MouseEvent) {
+  private handleClickDeleteButton(e: MouseEvent) {
     const target = e.target as HTMLButtonElement;
     const index = parseInt(target.parentElement?.getAttribute('data-index') as string, 10);
     this.images = [...this.images.slice(0, index), ...this.images.slice(index + 1)];
@@ -49,7 +49,7 @@ export default class ImageTab extends Tab {
     this.render();
   }
 
-  submit(inputValues: string[]) {
+  protected submit(inputValues: string[]) {
     if (inputValues.length === 2) {
       if (!inputValues[0] || !inputValues[1]) return;
       this.images.push({
@@ -62,7 +62,7 @@ export default class ImageTab extends Tab {
     this.render();
   }
 
-  render() {
+  protected render() {
     this.dataContainer.innerHTML = '';
 
     this.images && this.images.forEach((element, i) => {
