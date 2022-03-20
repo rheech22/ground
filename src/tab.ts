@@ -1,3 +1,5 @@
+import { LABEL_BACKGROUND, LABEL_FONT } from "./constants/colors.js";
+
 export default abstract class Tab {
   protected element: HTMLElement;
   private addButton: HTMLButtonElement;
@@ -46,11 +48,11 @@ export default abstract class Tab {
     [...this.modalForm.elements].forEach(element => {
       if(element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
         if(element.id === 'font'){
-          element.value = '#ffffff';
+          element.value = LABEL_FONT;
           return
         };
         if(element.id === 'background'){
-          element.value = '#cc8e35';
+          element.value = LABEL_BACKGROUND;
           return
         };
         element.value = '';
@@ -112,8 +114,7 @@ export default abstract class Tab {
     draggableList.addEventListener('drop', ({target}: MouseEvent)=> {
       const targetElement = target as HTMLElement;
 
-      if(targetElement instanceof HTMLButtonElement) {
-        this.render();
+      if(!targetElement.classList.contains('draggable')) {
         return;
       };
 

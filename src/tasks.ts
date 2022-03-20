@@ -1,3 +1,5 @@
+import { LABEL_BACKGROUND, LABEL_FONT } from './constants/colors.js';
+
 import Tab from './tab.js';
 
 type Category = {
@@ -32,13 +34,13 @@ export default class TaskTab extends Tab {
     label2.htmlFor = 'font';
     label2.innerHTML = `
       Font-Color
-      <input type="color" id="font" value="#ffffff"/>
+      <input type="color" id="font" value=${LABEL_FONT} />
     `;
     const label3 = document.createElement('label');
     label3.htmlFor = 'background';
     label3.innerHTML = `
       Background-Color
-      <input type="color" id="background" value="#cc8e35"/>
+      <input type="color" id="background" value=${LABEL_BACKGROUND} />
     `;
     this.modalForm.prepend(label1, label2, label3);
     const button = document.createElement('button');
@@ -96,15 +98,22 @@ export default class TaskTab extends Tab {
 
   submit(inputValues: string[]){
     if(inputValues.length === 3){
-      if(!inputValues[0]) return;
+      const [ title, fontColor, buttonColor ] = inputValues;
+      if(!title) return;
+      
+      if([...this.categories].find((category)=> category.title === title)){
+        alert('This label already exists...');
+        return;
+      };
+
       this.categories.push({
-        title: inputValues[0],
-        fontColor: inputValues[1],
-        buttonColor: inputValues[2]
+        title,
+        fontColor,
+        buttonColor
       });
       this.save({name: 'categories', data: this.categories});
-      this.save({name: inputValues[0], data: []});
-      this.selectedCategory = inputValues[0];
+      this.save({name: title, data: []});
+      this.selectedCategory = title;
       this.tasks = this.load(this.selectedCategory);
     };
 
@@ -145,10 +154,11 @@ export default class TaskTab extends Tab {
       const input = document.createElement('input');
       input.type = 'text';
       input.placeholder = 'what are u gonna do?';
+      input.autofocus = true;
       
       const button = document.createElement('button');
       button.type = 'submit';
-      button.innerText = 'Add task';
+      button.innerText = '+';
 
       form.append(input, button);
       form.addEventListener('submit', this.handleClickTaskSubmit.bind(this));
@@ -179,12 +189,16 @@ export default class TaskTab extends Tab {
 
       this.dataContainer.appendChild(ul);
       
+      const deleteLabelContainer = document.createElement('div');
       const deleteLabelButton = document.createElement('button');
-      deleteLabelButton.innerText = 'Remove this label';
-      deleteLabelButton.classList.add('delete-label-button');
+
+      deleteLabelContainer.classList.add('delete-label-container');
+      deleteLabelContainer.appendChild(deleteLabelButton);
+      
+      deleteLabelButton.innerText = `Remove the label: ${this.selectedCategory}`;
       deleteLabelButton.addEventListener('click', this.deleteLabel.bind(this));
-  
-      this.dataContainer.appendChild(deleteLabelButton);
+      
+      this.dataContainer.appendChild(deleteLabelContainer);
     };
 
 
