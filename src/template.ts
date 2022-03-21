@@ -3,7 +3,11 @@ import MemoTab from './memos.js';
 import ImageTab from './images.js';
 import VideoTab from './videos.js';
 
-type Tabs = typeof MemoTab | typeof TaskTab | typeof ImageTab | typeof VideoTab;
+type Tabs =
+  typeof MemoTab |
+  typeof TaskTab |
+  typeof ImageTab|
+  typeof VideoTab;
 
 const tabs: {[key: string]: Tabs} = {
   tasks: TaskTab,
@@ -18,8 +22,6 @@ export default class Template extends HTMLElement {
   private contents: NodeListOf<HTMLElement>;
 
   private template: HTMLTemplateElement = document.getElementById('template') as HTMLTemplateElement;
-
-  private form: HTMLFormElement = document.getElementById('modalForm') as HTMLFormElement;
 
   constructor() {
     super();
@@ -51,9 +53,11 @@ export default class Template extends HTMLElement {
     this.tabs.forEach((tab, i) => tab.addEventListener('click', () => handleClick(i)));
   }
 
+  // eslint-disable-next-line class-methods-use-this
   private detachListeners() {
-    const clone = this.form.cloneNode(true);
-    this.form.parentNode?.replaceChild(clone, this.form);
+    const form = document.getElementById('modalForm') as HTMLFormElement;
+    const clone = form.cloneNode(true);
+    form.parentNode?.replaceChild(clone, form);
   }
 
   private selectTab(i: number) {
@@ -71,6 +75,7 @@ export default class Template extends HTMLElement {
         }
       }
     });
+
     this.tabs.forEach((tab, index) => {
       tab.classList.remove('active');
 

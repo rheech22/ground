@@ -1,4 +1,17 @@
+/* eslint-disable class-methods-use-this */
 import { LABEL_BACKGROUND, LABEL_FONT } from './constants/colors.js';
+
+type Draggable<T> = {
+  draggableList: HTMLElement,
+  dataName: string,
+  dataIndex: number,
+  data: T[]
+}
+
+type LocalData<T> = {
+  name: string;
+  data: T[]
+}
 
 export default abstract class Tab {
   protected element: HTMLElement;
@@ -7,7 +20,7 @@ export default abstract class Tab {
 
   private modal: HTMLDivElement = document.querySelector('.modalWrapper') as HTMLDivElement;
 
-  private closeButton: HTMLButtonElement = document.getElementById('closeModal') as HTMLButtonElement;
+  private closeModalButton: HTMLButtonElement = document.getElementById('closeModal') as HTMLButtonElement;
 
   protected modalForm: HTMLFormElement = document.getElementById('modalForm') as HTMLFormElement;
 
@@ -16,12 +29,6 @@ export default abstract class Tab {
   protected handleClick: (e:SubmitEvent) => void;
 
   protected dragStartIndex: number | null;
-
-  protected saveToLocal: <T>({ name, data }: {name: string, data:T[]}) => void;
-
-  protected loadFromLocal: <T>(name: string) => T[];
-
-  protected deleteFromLocal: (name: string) => void;
 
   constructor(element: HTMLElement) {
     const handleCloseModal = (e: MouseEvent) => {
@@ -34,7 +41,7 @@ export default abstract class Tab {
     this.dataContainer = this.element.querySelector('.data-container') as HTMLDivElement;
     this.addButton = this.element.querySelector('button') as HTMLButtonElement;
     this.modal.addEventListener('click', handleCloseModal);
-    this.closeButton.addEventListener('click', handleCloseModal);
+    this.closeModalButton.addEventListener('click', handleCloseModal);
     this.addButton.addEventListener('click', this.popUp.bind(this));
 
     this.handleClick = (e: SubmitEvent) => {
@@ -49,15 +56,6 @@ export default abstract class Tab {
       }
       this.submit(inputValues);
     };
-
-    this.saveToLocal = <T>({ name, data }: {
-      name: string,
-      data: T[],
-    }) => localStorage.setItem(name, JSON.stringify(data));
-
-    this.loadFromLocal = (name: string) => JSON.parse(localStorage.getItem(name) as string);
-
-    this.deleteFromLocal = (name: string) => localStorage.removeItem(name);
 
     this.setModalInputs();
     this.render();
@@ -84,17 +82,24 @@ export default abstract class Tab {
     });
   }
 
+  protected saveLocalData<T>({ name, data }: LocalData<T>) {
+    localStorage.setItem(name, JSON.stringify(data));
+  }
+
+  protected loadLocalData<T>(name: string): T[] {
+    return JSON.parse(localStorage.getItem(name) as string);
+  }
+
+  protected deleteLocalData(name: string) {
+    localStorage.removeItem(name);
+  }
+
   protected setDraggable<T>({
     draggableList,
     dataName,
     dataIndex,
     data,
-  }: {
-    draggableList: HTMLElement,
-    dataName: string,
-    dataIndex: number,
-    data: T[]
-  }) {
+  }: Draggable<T>) {
     draggableList.classList.add('draggable');
     draggableList.setAttribute('draggable', 'true');
     draggableList.setAttribute('data-index', dataIndex.toString());

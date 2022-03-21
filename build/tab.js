@@ -1,8 +1,9 @@
+/* eslint-disable class-methods-use-this */
 import { LABEL_BACKGROUND, LABEL_FONT } from './constants/colors.js';
 export default class Tab {
     constructor(element) {
         this.modal = document.querySelector('.modalWrapper');
-        this.closeButton = document.getElementById('closeModal');
+        this.closeModalButton = document.getElementById('closeModal');
         this.modalForm = document.getElementById('modalForm');
         const handleCloseModal = (e) => {
             if (e.currentTarget === e.target) {
@@ -14,7 +15,7 @@ export default class Tab {
         this.dataContainer = this.element.querySelector('.data-container');
         this.addButton = this.element.querySelector('button');
         this.modal.addEventListener('click', handleCloseModal);
-        this.closeButton.addEventListener('click', handleCloseModal);
+        this.closeModalButton.addEventListener('click', handleCloseModal);
         this.addButton.addEventListener('click', this.popUp.bind(this));
         this.handleClick = (e) => {
             e.preventDefault();
@@ -28,9 +29,6 @@ export default class Tab {
             }
             this.submit(inputValues);
         };
-        this.saveToLocal = ({ name, data }) => localStorage.setItem(name, JSON.stringify(data));
-        this.loadFromLocal = (name) => JSON.parse(localStorage.getItem(name));
-        this.deleteFromLocal = (name) => localStorage.removeItem(name);
         this.setModalInputs();
         this.render();
     }
@@ -52,6 +50,15 @@ export default class Tab {
                 element.value = '';
             }
         });
+    }
+    saveLocalData({ name, data }) {
+        localStorage.setItem(name, JSON.stringify(data));
+    }
+    loadLocalData(name) {
+        return JSON.parse(localStorage.getItem(name));
+    }
+    deleteLocalData(name) {
+        localStorage.removeItem(name);
     }
     setDraggable({ draggableList, dataName, dataIndex, data, }) {
         draggableList.classList.add('draggable');

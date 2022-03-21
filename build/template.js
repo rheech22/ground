@@ -12,7 +12,6 @@ export default class Template extends HTMLElement {
     constructor() {
         super();
         this.template = document.getElementById('template');
-        this.form = document.getElementById('modalForm');
         this.attachShadow({ mode: 'open' })
             .appendChild(this.template.content.cloneNode(true));
         this.tabs = this.querySelectorAll('.tabs');
@@ -33,9 +32,11 @@ export default class Template extends HTMLElement {
         };
         this.tabs.forEach((tab, i) => tab.addEventListener('click', () => handleClick(i)));
     }
+    // eslint-disable-next-line class-methods-use-this
     detachListeners() {
-        const clone = this.form.cloneNode(true);
-        this.form.parentNode?.replaceChild(clone, this.form);
+        const form = document.getElementById('modalForm');
+        const clone = form.cloneNode(true);
+        form.parentNode?.replaceChild(clone, form);
     }
     selectTab(i) {
         this.contents.forEach((content, index) => {

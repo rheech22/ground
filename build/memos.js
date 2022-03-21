@@ -2,36 +2,36 @@ import Tab from './tab.js';
 export default class MemoTab extends Tab {
     constructor(element) {
         super(element);
-        this.memos = this.loadFromLocal('memos') || [];
+        this.memos = this.loadLocalData('memos') || [];
         this.dragStartIndex = null;
         this.modalForm.addEventListener('submit', this.handleClick);
         this.render();
     }
     setModalInputs() {
         this.modalForm.innerHTML = '';
-        const label1 = document.createElement('label');
-        label1.htmlFor = 'title';
-        label1.innerHTML = `
+        const title = document.createElement('label');
+        const description = document.createElement('label');
+        const button = document.createElement('button');
+        title.htmlFor = 'title';
+        title.innerHTML = `
       Title
       <input type="text" id='title'/>    
     `;
-        const label2 = document.createElement('label');
-        label2.htmlFor = 'description';
-        label2.innerHTML = `
+        description.htmlFor = 'description';
+        description.innerHTML = `
       Contents
       <textarea id="description"></textarea>
     `;
-        this.modalForm.prepend(label1, label2);
-        const button = document.createElement('button');
         button.type = 'submit';
         button.innerText = 'Add';
+        this.modalForm.prepend(title, description);
         this.modalForm.appendChild(button);
     }
     handleClickDeleteButton(e) {
         const target = e.target;
         const index = parseInt(target.parentElement?.getAttribute('data-index'), 10);
         this.memos = [...this.memos.slice(0, index), ...this.memos.slice(index + 1)];
-        this.saveToLocal({ name: 'memos', data: this.memos });
+        this.saveLocalData({ name: 'memos', data: this.memos });
         this.render();
     }
     submit(inputValues) {
@@ -42,7 +42,7 @@ export default class MemoTab extends Tab {
                 title: inputValues[0],
                 description: inputValues[1],
             });
-            this.saveToLocal({ name: 'memos', data: this.memos });
+            this.saveLocalData({ name: 'memos', data: this.memos });
         }
         this.popDown();
         this.render();

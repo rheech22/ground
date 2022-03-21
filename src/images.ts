@@ -10,7 +10,7 @@ export default class ImageTab extends Tab {
 
   constructor(element: HTMLElement) {
     super(element);
-    this.images = this.loadFromLocal('images') || [];
+    this.images = this.loadLocalData('images') || [];
     this.modalForm.addEventListener('submit', this.handleClick);
     this.render();
   }
@@ -18,34 +18,35 @@ export default class ImageTab extends Tab {
   protected setModalInputs() {
     this.modalForm.innerHTML = '';
 
-    const label1 = document.createElement('label');
-    label1.htmlFor = 'imageUrl';
-    label1.innerHTML = `
+    const imageUrl = document.createElement('label');
+    const description = document.createElement('label');
+    const button = document.createElement('button');
+
+    imageUrl.htmlFor = 'imageUrl';
+    imageUrl.innerHTML = `
       URL
       <input type="text" id='imageUrl' placeholder="Paste the image URL"/>    
     `;
 
-    const label2 = document.createElement('label');
-    label2.htmlFor = 'description';
-    label2.innerHTML = `
+    description.htmlFor = 'description';
+    description.innerHTML = `
       Description
       <input type="text" id='description' placeholder="Enter a description for the image"/>    
     `;
 
-    this.modalForm.prepend(label1, label2);
-
-    const button = document.createElement('button');
     button.type = 'submit';
     button.innerText = 'Add';
 
+    this.modalForm.prepend(imageUrl, description);
     this.modalForm.appendChild(button);
   }
 
   private handleClickDeleteButton(e: MouseEvent) {
     const target = e.target as HTMLButtonElement;
     const index = parseInt(target.parentElement?.getAttribute('data-index') as string, 10);
+
     this.images = [...this.images.slice(0, index), ...this.images.slice(index + 1)];
-    this.saveToLocal({ name: 'images', data: this.images });
+    this.saveLocalData({ name: 'images', data: this.images });
     this.render();
   }
 
@@ -56,7 +57,7 @@ export default class ImageTab extends Tab {
         imageUrl: inputValues[0],
         description: inputValues[1],
       });
-      this.saveToLocal({ name: 'images', data: this.images });
+      this.saveLocalData({ name: 'images', data: this.images });
     }
     this.popDown();
     this.render();

@@ -10,7 +10,7 @@ export default class VideoTab extends Tab {
 
   constructor(element: HTMLElement) {
     super(element);
-    this.videos = this.loadFromLocal('videos') || [];
+    this.videos = this.loadLocalData('videos') || [];
     this.modalForm.addEventListener('submit', this.handleClick);
     this.render();
   }
@@ -18,51 +18,55 @@ export default class VideoTab extends Tab {
   protected setModalInputs() {
     this.modalForm.innerHTML = '';
 
-    const label1 = document.createElement('label');
-    label1.htmlFor = 'videoUrl';
-    label1.innerHTML = `
+    const videoUrl = document.createElement('label');
+    const videoDescription = document.createElement('label');
+    const submitButton = document.createElement('button');
+
+    videoUrl.htmlFor = 'videoUrl';
+    videoUrl.innerHTML = `
       URL
       <input type="text" id='videoUrl' placeholder="Paste the video URL"/>    
     `;
 
-    const label2 = document.createElement('label');
-    label2.htmlFor = 'description';
-    label2.innerHTML = `
+    videoDescription.htmlFor = 'description';
+    videoDescription.innerHTML = `
       Description
       <input type="text" id='description' placeholder="Enter a description for the video"/>    
     `;
 
-    this.modalForm.prepend(label1, label2);
+    submitButton.type = 'submit';
+    submitButton.innerText = 'Add';
 
-    const button = document.createElement('button');
-    button.type = 'submit';
-    button.innerText = 'Add';
-
-    this.modalForm.appendChild(button);
+    this.modalForm.prepend(videoUrl, videoDescription);
+    this.modalForm.appendChild(submitButton);
   }
 
   private handleClickDeleteButton(e: MouseEvent) {
     const target = e.target as HTMLButtonElement;
     const index = parseInt(target.parentElement?.getAttribute('data-index') as string, 10);
+
     this.videos = [...this.videos.slice(0, index), ...this.videos.slice(index + 1)];
-    this.saveToLocal({ name: 'videos', data: this.videos });
+    this.saveLocalData({ name: 'videos', data: this.videos });
     this.render();
   }
 
   protected submit(inputValues: string[]) {
     if (inputValues.length === 2) {
       if (!inputValues[0] || !inputValues[1]) return;
+
       let videoId = inputValues[0].split('v=')[1];
       const description = inputValues[1];
       const ampersandIndex = videoId.indexOf('&');
+
       if (ampersandIndex !== -1) {
         videoId = videoId.substring(0, ampersandIndex);
       }
+
       this.videos.push({
         description,
         videoId,
       });
-      this.saveToLocal({ name: 'videos', data: this.videos });
+      this.saveLocalData({ name: 'videos', data: this.videos });
     }
     this.popDown();
     this.render();
@@ -73,7 +77,7 @@ export default class VideoTab extends Tab {
 
     this.videos && this.videos.forEach((element, i) => {
       const container = document.createElement('div');
-      const button = document.createElement('button');
+      const deleteButton = document.createElement('button');
 
       container.classList.add('video-container');
       container.innerHTML = `
@@ -82,11 +86,11 @@ export default class VideoTab extends Tab {
         </div>
         <p>${element.description}</p>
       `;
+      container.appendChild(deleteButton);
 
-      container.appendChild(button);
-      button.innerHTML = '␡';
-      button.addEventListener('click', this.handleClickDeleteButton.bind(this));
-      button.classList.add('delete-button');
+      deleteButton.innerHTML = '␡';
+      deleteButton.addEventListener('click', this.handleClickDeleteButton.bind(this));
+      deleteButton.classList.add('delete-button');
 
       this.setDraggable({
         draggableList: container,
