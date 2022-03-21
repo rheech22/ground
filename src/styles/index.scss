@@ -1,7 +1,11 @@
 $blue: rgba(84, 160, 255, 1);
+$lightBlue: rgba(84, 160, 255, 0.5);
 $red: rgba(238, 82, 83, 1);
 $drakgrey: #2f3640;
 $grey: rgba(83, 92, 104, 1);
+$main: rgba(225, 95, 65, 1.0);
+$sub: rgba(225, 95, 65, 0.7);
+$nav: #BEA6A0;
 
 $button-shadow:
   rgba(0, 0, 0, 0.3) 0px 1px 2px, 
@@ -30,8 +34,9 @@ body {
 header {
   width: 100%;
   text-align: center;
-  font-family: 'Julius Sans One', sans-serif;
-  background-color: black;
+  font-family: 'Permanent Marker', cursive;
+  font-size: 1.5em;
+  background-color: $main;
   color: white;
   h1 {
     font-weight: 400;
@@ -40,23 +45,23 @@ header {
 
 custom-main {
   width: 100%;
-  background-color: black;
 };
 
 nav {
   display: flex;
   width: 100vw;
-  background-color: black;
+  background-color: $main;
   padding-left: .5em;
   
   button {
-    font-family: 'Julius Sans One', sans-serif;
+    font-family: 'Permanent Marker', cursive;
     font-size: 16px;
     margin: 0em .3em;
     border: none;
+    border-radius: 10px 10px 0 0;
     width: 100px;
     height: 70px;
-    background: $drakgrey;
+    background: $nav;
     color: white;
     transition: all .5s;
 
@@ -81,7 +86,7 @@ section {
     font-size: 1em; 
     margin: 1em 0em;
     padding: .7em;
-    background-color: $blue;
+    background-color: $main;
     color: white;
     box-shadow: $button-shadow;
     opacity: 0.8;
@@ -118,11 +123,13 @@ ul {
   margin: 2em 0;
   padding: 0;
   width: 100%;
+  min-width: 600px;
 };
 
 .draggable {
-  cursor: pointer;
+  margin: auto;
   transition: transform .3s ease-in-out;
+  cursor: pointer;
   &:hover{
     transform: scale(1.02);
   };
@@ -132,7 +139,7 @@ ul {
 };
 
 .over {
-  background-color: rgba(84, 160, 255, 0.5);
+  background-color: $sub;
   color: white;
 };
 
@@ -149,9 +156,10 @@ ul {
     padding: 1em;
     position: relative;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    &:last-child {
-      margin-bottom: 1em;
-    };
+  };
+  
+  div:last-child {
+    margin-bottom: 1em;
   };
 
   div + div {
@@ -189,6 +197,7 @@ ul {
     align-items: center;
     margin-top: 2em;
     width: 100%;
+    min-width: 600px;
     font-size: 1em;
     & > input {
       margin-right: 1em;
@@ -205,7 +214,7 @@ ul {
       justify-content: center;
       align-items: center;
       font-size: 32px;
-      background: $blue;
+      background: $main;
       border: none;
       border-radius: 3px;
       width: 40px;
@@ -225,10 +234,10 @@ ul {
     align-items: center;
     border-radius: 5px;
     padding: 1px 10px;
-    width: 300px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     margin-bottom: 1em;
     font-size: 10px;
+    width: 400px;
     button {
       margin-left: auto !important;
       background: none;
@@ -240,20 +249,25 @@ ul {
       }
     }
   };
+
+  .memo-container {
+    width: 600px;
+  };
   
   .image-container {
     display: flex;
     flex-direction: row !important;
     padding: 1em;
+    width: 600px;
+    
     div {
-      max-width: 400px;
-      min-width: 300px;
+      width: 300px;
       background-size: 100% 100%;
       margin-right: 1em;
     };
     p {
       overflow-y: scroll;
-      height: 300px;
+      height: 200px;
       font-size: 10px;
     }
   };
@@ -261,15 +275,15 @@ ul {
   .video-container{
     display: flex;
     flex-direction: row !important;
+    width: 600px;
     
     .video-wrapper{
-      width: 500px;
-      min-width: 300px;
+      width: 300px;
       margin-right: 1em;
     };
 
     lite-youtube {
-      pointer-events: all;      
+      pointer-events: all;
     };
   };
   
@@ -334,7 +348,7 @@ ul {
         color: white;
         font-size: 1em;
         width: 100%;
-        background-color: $blue;
+        background-color: $main;
         font-family: 'Julius Sans One', sans-serif;
         box-shadow: $button-shadow;
         opacity: 0.8;

@@ -73,6 +73,7 @@ export default class MemoTab extends Tab {
       const title = document.createElement('h6');
       const button = document.createElement('button');
 
+      container.classList.add('memo-container');
       container.append(title, description, button);
       description.innerHTML = element.description;
       title.innerHTML = element.title;

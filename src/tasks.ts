@@ -211,7 +211,7 @@ export default class TaskTab extends Tab {
       deleteLabelContainer.classList.add('delete-label-container');
       deleteLabelContainer.appendChild(deleteLabelButton);
 
-      deleteLabelButton.innerText = `Remove the label: ${this.selectedCategory}`;
+      deleteLabelButton.innerText = `Remove this label: ${this.selectedCategory}`;
       deleteLabelButton.addEventListener('click', this.deleteLabel.bind(this));
 
       this.dataContainer.appendChild(deleteLabelContainer);

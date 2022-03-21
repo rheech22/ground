@@ -20,8 +20,9 @@ body {
 header {
   width: 100%;
   text-align: center;
-  font-family: "Julius Sans One", sans-serif;
-  background-color: black;
+  font-family: "Permanent Marker", cursive;
+  font-size: 1.5em;
+  background-color: #e15f41;
   color: white;
 }
 header h1 {
@@ -30,23 +31,23 @@ header h1 {
 
 custom-main {
   width: 100%;
-  background-color: black;
 }
 
 nav {
   display: flex;
   width: 100vw;
-  background-color: black;
+  background-color: #e15f41;
   padding-left: 0.5em;
 }
 nav button {
-  font-family: "Julius Sans One", sans-serif;
+  font-family: "Permanent Marker", cursive;
   font-size: 16px;
   margin: 0em 0.3em;
   border: none;
+  border-radius: 10px 10px 0 0;
   width: 100px;
   height: 70px;
-  background: #2f3640;
+  background: #BEA6A0;
   color: white;
   transition: all 0.5s;
 }
@@ -69,7 +70,7 @@ section > button {
   font-size: 1em;
   margin: 1em 0em;
   padding: 0.7em;
-  background-color: #54a0ff;
+  background-color: #e15f41;
   color: white;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 2px, rgba(0, 0, 0, 0.2) 0px 3px 5px -3px, rgba(0, 0, 0, 0.1) 0px -1px 0px inset;
   opacity: 0.8;
@@ -104,11 +105,13 @@ ul {
   margin: 2em 0;
   padding: 0;
   width: 100%;
+  min-width: 600px;
 }
 
 .draggable {
-  cursor: pointer;
+  margin: auto;
   transition: transform 0.3s ease-in-out;
+  cursor: pointer;
 }
 .draggable:hover {
   transform: scale(1.02);
@@ -118,7 +121,7 @@ ul {
 }
 
 .over {
-  background-color: rgba(84, 160, 255, 0.5);
+  background-color: rgba(225, 95, 65, 0.7);
   color: white;
 }
 
@@ -135,7 +138,7 @@ ul {
   position: relative;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
-.data-container > div:last-child {
+.data-container div:last-child {
   margin-bottom: 1em;
 }
 .data-container div + div {
@@ -169,6 +172,7 @@ ul {
   align-items: center;
   margin-top: 2em;
   width: 100%;
+  min-width: 600px;
   font-size: 1em;
 }
 .data-container .todo-form > input {
@@ -186,7 +190,7 @@ ul {
   justify-content: center;
   align-items: center;
   font-size: 32px;
-  background: #54a0ff;
+  background: #e15f41;
   border: none;
   border-radius: 3px;
   width: 40px;
@@ -204,10 +208,10 @@ ul {
   align-items: center;
   border-radius: 5px;
   padding: 1px 10px;
-  width: 300px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   margin-bottom: 1em;
   font-size: 10px;
+  width: 400px;
 }
 .data-container .todo button {
   margin-left: auto !important;
@@ -219,29 +223,32 @@ ul {
 .data-container .todo button:hover {
   color: #ee5253;
 }
+.data-container .memo-container {
+  width: 600px;
+}
 .data-container .image-container {
   display: flex;
   flex-direction: row !important;
   padding: 1em;
+  width: 600px;
 }
 .data-container .image-container div {
-  max-width: 400px;
-  min-width: 300px;
+  width: 300px;
   background-size: 100% 100%;
   margin-right: 1em;
 }
 .data-container .image-container p {
   overflow-y: scroll;
-  height: 300px;
+  height: 200px;
   font-size: 10px;
 }
 .data-container .video-container {
   display: flex;
   flex-direction: row !important;
+  width: 600px;
 }
 .data-container .video-container .video-wrapper {
-  width: 500px;
-  min-width: 300px;
+  width: 300px;
   margin-right: 1em;
 }
 .data-container .video-container lite-youtube {
@@ -306,7 +313,7 @@ ul {
   color: white;
   font-size: 1em;
   width: 100%;
-  background-color: #54a0ff;
+  background-color: #e15f41;
   font-family: "Julius Sans One", sans-serif;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 2px, rgba(0, 0, 0, 0.2) 0px 3px 5px -3px, rgba(0, 0, 0, 0.1) 0px -1px 0px inset;
   opacity: 0.8;
