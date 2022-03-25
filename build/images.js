@@ -3,28 +3,31 @@ export default class ImageTab extends Tab {
     constructor(element) {
         super(element);
         this.images = this.loadLocalData('images') || [];
-        this.modalForm.addEventListener('submit', this.handleClick);
         this.render();
     }
     setModalInputs() {
-        this.modalForm.innerHTML = '';
-        const imageUrl = document.createElement('label');
-        const description = document.createElement('label');
-        const button = document.createElement('button');
-        imageUrl.htmlFor = 'imageUrl';
-        imageUrl.innerHTML = `
-      URL
-      <input type="text" id='imageUrl' placeholder="Paste the image URL"/>    
+        this.modal.innerHTML = '';
+        const template = `
+      <div class="modal">
+        <button id="closeModal">_</button>
+        <form id="modalForm">
+          <label for="imageUrl">
+            URL
+            <input type="text" id='imageUrl' placeholder="Paste the image URL"/>    
+          </label>
+          <label for="description">
+            Description
+            <input type="text" id='description' placeholder="Enter a description for the image"/>    
+          </label>
+          <button type="submit">Add</button>
+        </form>
+      </div>
     `;
-        description.htmlFor = 'description';
-        description.innerHTML = `
-      Description
-      <input type="text" id='description' placeholder="Enter a description for the image"/>    
-    `;
-        button.type = 'submit';
-        button.innerText = 'Add';
-        this.modalForm.prepend(imageUrl, description);
-        this.modalForm.appendChild(button);
+        this.modal.innerHTML = template;
+        const modalForm = this.modal.querySelector('#modalForm');
+        const closeButton = this.modal.querySelector('#closeModal');
+        modalForm.addEventListener('submit', this.submitModalForm.bind(this));
+        closeButton.addEventListener('click', this.closeModal.bind(this));
     }
     handleClickDeleteButton(e) {
         const target = e.target;
@@ -61,7 +64,7 @@ export default class ImageTab extends Tab {
             button.addEventListener('click', this.handleClickDeleteButton.bind(this));
             button.classList.add('delete-button');
             this.setDraggable({
-                draggableList: container,
+                draggableItem: container,
                 dataName: 'images',
                 dataIndex: i,
                 data: this.images,

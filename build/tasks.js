@@ -6,34 +6,35 @@ export default class TaskTab extends Tab {
         this.categories = this.loadLocalData('categories') || [];
         this.selectedCategory = this.categories && this.categories.length ? this.categories[0].title : '';
         this.tasks = this.selectedCategory ? this.loadLocalData(this.selectedCategory) : [];
-        this.modalForm.addEventListener('submit', this.handleClick);
         this.render();
     }
     setModalInputs() {
-        this.modalForm.innerHTML = '';
-        const taskLabel = document.createElement('label');
-        const fontColor = document.createElement('label');
-        const backgroundColor = document.createElement('label');
-        const submitButton = document.createElement('button');
-        taskLabel.htmlFor = 'category';
-        taskLabel.innerHTML = `
-      Label
-      <input type="text" id="category" placeholder="Enter a label"/>    
+        this.modal.innerHTML = '';
+        const template = `
+      <div class="modal">
+        <button id="closeModal">_</button>
+        <form id="modalForm">
+          <label for="category">
+            Label
+            <input type="text" id="category" placeholder="Enter a label"/>
+          </label>
+          <label for="font">
+            Font-Color
+            <input type="color" id="font" value=${LABEL_FONT} />
+          </label>
+          <label for="background">
+            Background-Color
+            <input type="color" id="background" value=${LABEL_BACKGROUND} />
+          </label>
+          <button type="submit">Add</button>
+        </form>
+      </div>
     `;
-        fontColor.htmlFor = 'font';
-        fontColor.innerHTML = `
-      Font-Color
-      <input type="color" id="font" value=${LABEL_FONT} />
-    `;
-        backgroundColor.htmlFor = 'background';
-        backgroundColor.innerHTML = `
-      Background-Color
-      <input type="color" id="background" value=${LABEL_BACKGROUND} />
-    `;
-        submitButton.innerText = 'Add';
-        submitButton.type = 'submit';
-        this.modalForm.prepend(taskLabel, fontColor, backgroundColor);
-        this.modalForm.appendChild(submitButton);
+        this.modal.innerHTML = template;
+        const modalForm = this.modal.querySelector('#modalForm');
+        const closeButton = this.modal.querySelector('#closeModal');
+        modalForm.addEventListener('submit', this.submitModalForm.bind(this));
+        closeButton.addEventListener('click', this.closeModal.bind(this));
     }
     handleClickCategory(e) {
         const targetElement = e.target;
@@ -141,7 +142,7 @@ export default class TaskTab extends Tab {
                 deleteButton.addEventListener('click', this.deleteTodo.bind(this));
                 taskList.appendChild(taskElement);
                 this.setDraggable({
-                    draggableList: taskElement,
+                    draggableItem: taskElement,
                     dataName: this.selectedCategory,
                     dataIndex: i,
                     data: this.tasks,

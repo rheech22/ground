@@ -2,7 +2,7 @@
 import { LABEL_BACKGROUND, LABEL_FONT } from './constants/colors.js';
 
 type Draggable<T> = {
-  draggableList: HTMLElement,
+  draggableItem: HTMLElement,
   dataName: string,
   dataIndex: number,
   data: T[]
@@ -16,46 +16,20 @@ type LocalData<T> = {
 export default abstract class Tab {
   protected element: HTMLElement;
 
-  private addButton: HTMLButtonElement;
+  private addButton: HTMLButtonElement = document.querySelector('button')! as HTMLButtonElement;
 
-  private modal: HTMLDivElement = document.querySelector('.modalWrapper') as HTMLDivElement;
-
-  private closeModalButton: HTMLButtonElement = document.getElementById('closeModal') as HTMLButtonElement;
-
-  protected modalForm: HTMLFormElement = document.getElementById('modalForm') as HTMLFormElement;
+  protected modal: HTMLDivElement = document.querySelector('.modalWrapper')! as HTMLDivElement;
 
   protected dataContainer: HTMLDivElement;
 
-  protected handleClick: (e:SubmitEvent) => void;
-
-  protected dragStartIndex: number | null;
+  protected dragStartIndex: number | null = null;
 
   constructor(element: HTMLElement) {
-    const handleCloseModal = (e: MouseEvent) => {
-      if (e.currentTarget === e.target) {
-        this.popDown();
-      }
-    };
     this.element = element;
-    this.dragStartIndex = null;
     this.dataContainer = this.element.querySelector('.data-container') as HTMLDivElement;
-    this.addButton = this.element.querySelector('button') as HTMLButtonElement;
-    this.modal.addEventListener('click', handleCloseModal);
-    this.closeModalButton.addEventListener('click', handleCloseModal);
-    this.addButton.addEventListener('click', this.popUp.bind(this));
 
-    this.handleClick = (e: SubmitEvent) => {
-      e.preventDefault();
-      const inputValues:string[] = [];
-      if (e.target instanceof HTMLFormElement) {
-        [...e.target.elements].forEach((el) => {
-          if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
-            inputValues.push(el.value);
-          }
-        });
-      }
-      this.submit(inputValues);
-    };
+    this.modal.addEventListener('click', this.closeModal);
+    this.addButton.addEventListener('click', this.popUp.bind(this));
 
     this.setModalInputs();
     this.render();
@@ -67,19 +41,48 @@ export default abstract class Tab {
 
   protected popDown() {
     this.modal.style.display = 'none';
-    [...this.modalForm.elements].forEach((element) => {
+    this.resetModal();
+  }
+
+  private resetModal() {
+    const modalForm = this.modal.querySelector('#modalForm')! as HTMLFormElement;
+
+    [...modalForm.elements].forEach((element) => {
       if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
-        if (element.id === 'font') {
-          element.value = LABEL_FONT;
-          return;
+        switch (element.id) {
+          case 'font':
+            element.value = LABEL_FONT;
+            return;
+          case 'background':
+            element.value = LABEL_BACKGROUND;
+            return;
+          default:
+            element.value = '';
         }
-        if (element.id === 'background') {
-          element.value = LABEL_BACKGROUND;
-          return;
-        }
-        element.value = '';
       }
     });
+  }
+
+  protected closeModal(e: MouseEvent) {
+    if (e.currentTarget === e.target) {
+      this.popDown();
+    }
+  }
+
+  protected submitModalForm(e: SubmitEvent) {
+    e.preventDefault();
+
+    const target = e.target! as HTMLFormElement;
+
+    const inputValues:string[] = [];
+
+    [...target.elements].forEach((el) => {
+      if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+        inputValues.push(el.value);
+      }
+    });
+
+    this.submit(inputValues);
   }
 
   protected saveLocalData<T>({ name, data }: LocalData<T>) {
@@ -95,36 +98,35 @@ export default abstract class Tab {
   }
 
   protected setDraggable<T>({
-    draggableList,
+    draggableItem,
     dataName,
     dataIndex,
     data,
   }: Draggable<T>) {
-    draggableList.classList.add('draggable');
-    draggableList.setAttribute('draggable', 'true');
-    draggableList.setAttribute('data-index', dataIndex.toString());
+    draggableItem.classList.add('draggable');
+    draggableItem.setAttribute('draggable', 'true');
+    draggableItem.setAttribute('data-index', dataIndex.toString());
 
-    draggableList.addEventListener('dragstart', ({ target }: MouseEvent) => {
+    draggableItem.addEventListener('dragstart', ({ target }: MouseEvent) => {
       const targetElement = target as HTMLElement;
-
       this.dragStartIndex = parseInt(targetElement.getAttribute('data-index') as string, 10);
     });
 
-    draggableList.addEventListener('dragover', (e) => {
+    draggableItem.addEventListener('dragover', (e) => {
       e.preventDefault();
     });
 
-    draggableList.addEventListener('dragenter', ({ target }: MouseEvent) => {
+    draggableItem.addEventListener('dragenter', ({ target }: MouseEvent) => {
       const targetElement = target as HTMLElement;
       targetElement.classList.add('over');
     });
 
-    draggableList.addEventListener('dragleave', ({ target }: MouseEvent) => {
+    draggableItem.addEventListener('dragleave', ({ target }: MouseEvent) => {
       const targetElement = target as HTMLElement;
       targetElement.classList.remove('over');
     });
 
-    draggableList.addEventListener('drop', ({ target }: MouseEvent) => {
+    draggableItem.addEventListener('drop', ({ target }: MouseEvent) => {
       const targetElement = target as HTMLElement;
 
       if (!targetElement.classList.contains('draggable')) {
@@ -139,7 +141,7 @@ export default abstract class Tab {
         data[this.dragStartIndex] = data[dragEndIndex];
         data[dragEndIndex] = tempData;
 
-        localStorage.setItem(dataName, JSON.stringify(data));
+        this.saveLocalData({ name: dataName, data });
 
         this.render();
       }

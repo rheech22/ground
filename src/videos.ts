@@ -13,34 +13,36 @@ export default class VideoTab extends Tab {
   constructor(element: HTMLElement) {
     super(element);
     this.videos = this.loadLocalData('videos') || [];
-    this.modalForm.addEventListener('submit', this.handleClick);
     this.render();
   }
 
   protected setModalInputs() {
-    this.modalForm.innerHTML = '';
+    this.modal.innerHTML = '';
 
-    const videoUrl = document.createElement('label');
-    const videoDescription = document.createElement('label');
-    const submitButton = document.createElement('button');
-
-    videoUrl.htmlFor = 'videoUrl';
-    videoUrl.innerHTML = `
-      URL
-      <input type="text" id='videoUrl' placeholder="Paste the video URL"/>    
+    const template = `
+      <div class="modal">
+        <button id="closeModal">_</button>
+        <form id="modalForm">
+          <label for="videoUrl">
+            URL
+            <input type="text" id='videoUrl' placeholder="Paste the video URL"/>
+          </label>
+          <label for="description">
+            Description
+            <input type="text" id='description' placeholder="Enter a description for the video"/>    
+          </label>
+          <button type="submit">Add</button>
+        </form>
+      </div>
     `;
 
-    videoDescription.htmlFor = 'description';
-    videoDescription.innerHTML = `
-      Description
-      <input type="text" id='description' placeholder="Enter a description for the video"/>    
-    `;
+    this.modal.innerHTML = template;
 
-    submitButton.type = 'submit';
-    submitButton.innerText = 'Add';
+    const modalForm = this.modal.querySelector('#modalForm')! as HTMLFormElement;
+    const closeButton = this.modal.querySelector('#closeModal')! as HTMLButtonElement;
 
-    this.modalForm.prepend(videoUrl, videoDescription);
-    this.modalForm.appendChild(submitButton);
+    modalForm.addEventListener('submit', this.submitModalForm.bind(this));
+    closeButton.addEventListener('click', this.closeModal.bind(this));
   }
 
   private handleClickDeleteButton(e: MouseEvent) {
@@ -92,7 +94,7 @@ export default class VideoTab extends Tab {
       deleteButton.classList.add('delete-button');
 
       this.setDraggable({
-        draggableList: container,
+        draggableItem: container,
         dataName: 'videos',
         dataIndex: i,
         data: this.videos,

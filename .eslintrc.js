@@ -23,6 +23,7 @@ module.exports = {
     'no-new': 0,
     'no-param-reassign': 0,
     'new-cap': 0,
+    '@typescript-eslint/no-non-null-assertion': 0,
   },
   settings: {
     'import/resolver': {

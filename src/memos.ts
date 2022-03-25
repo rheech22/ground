@@ -12,34 +12,36 @@ export default class MemoTab extends Tab {
     super(element);
     this.memos = this.loadLocalData('memos') || [];
     this.dragStartIndex = null;
-    this.modalForm.addEventListener('submit', this.handleClick);
     this.render();
   }
 
   protected setModalInputs() {
-    this.modalForm.innerHTML = '';
+    this.modal.innerHTML = '';
 
-    const title = document.createElement('label');
-    const description = document.createElement('label');
-    const button = document.createElement('button');
-
-    title.htmlFor = 'title';
-    title.innerHTML = `
-      Title
-      <input type="text" id='title'/>    
+    const template = `
+      <div class="modal">
+        <button id="closeModal">_</button>
+        <form id="modalForm">
+          <label for="title">
+            Title
+            <input type="text" id='title'/>    
+          </label>
+          <label for="description">
+            Contents
+            <textarea id="description"></textarea>
+          </label>
+          <button type="submit">Add</button>
+        </form>
+      </div>
     `;
 
-    description.htmlFor = 'description';
-    description.innerHTML = `
-      Contents
-      <textarea id="description"></textarea>
-    `;
+    this.modal.innerHTML = template;
 
-    button.type = 'submit';
-    button.innerText = 'Add';
+    const modalForm = this.modal.querySelector('#modalForm')! as HTMLFormElement;
+    const closeButton = this.modal.querySelector('#closeModal')! as HTMLButtonElement;
 
-    this.modalForm.prepend(title, description);
-    this.modalForm.appendChild(button);
+    modalForm.addEventListener('submit', this.submitModalForm.bind(this));
+    closeButton.addEventListener('click', this.closeModal.bind(this));
   }
 
   private handleClickDeleteButton(e: MouseEvent) {
@@ -83,7 +85,7 @@ export default class MemoTab extends Tab {
       button.setAttribute('draggable', 'false');
 
       this.setDraggable({
-        draggableList: container,
+        draggableItem: container,
         dataName: 'memos',
         dataIndex: i,
         data: this.memos,

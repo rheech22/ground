@@ -11,34 +11,36 @@ export default class ImageTab extends Tab {
   constructor(element: HTMLElement) {
     super(element);
     this.images = this.loadLocalData('images') || [];
-    this.modalForm.addEventListener('submit', this.handleClick);
     this.render();
   }
 
   protected setModalInputs() {
-    this.modalForm.innerHTML = '';
+    this.modal.innerHTML = '';
 
-    const imageUrl = document.createElement('label');
-    const description = document.createElement('label');
-    const button = document.createElement('button');
-
-    imageUrl.htmlFor = 'imageUrl';
-    imageUrl.innerHTML = `
-      URL
-      <input type="text" id='imageUrl' placeholder="Paste the image URL"/>    
+    const template = `
+      <div class="modal">
+        <button id="closeModal">_</button>
+        <form id="modalForm">
+          <label for="imageUrl">
+            URL
+            <input type="text" id='imageUrl' placeholder="Paste the image URL"/>    
+          </label>
+          <label for="description">
+            Description
+            <input type="text" id='description' placeholder="Enter a description for the image"/>    
+          </label>
+          <button type="submit">Add</button>
+        </form>
+      </div>
     `;
 
-    description.htmlFor = 'description';
-    description.innerHTML = `
-      Description
-      <input type="text" id='description' placeholder="Enter a description for the image"/>    
-    `;
+    this.modal.innerHTML = template;
 
-    button.type = 'submit';
-    button.innerText = 'Add';
+    const modalForm = this.modal.querySelector('#modalForm')! as HTMLFormElement;
+    const closeButton = this.modal.querySelector('#closeModal')! as HTMLButtonElement;
 
-    this.modalForm.prepend(imageUrl, description);
-    this.modalForm.appendChild(button);
+    modalForm.addEventListener('submit', this.submitModalForm.bind(this));
+    closeButton.addEventListener('click', this.closeModal.bind(this));
   }
 
   private handleClickDeleteButton(e: MouseEvent) {
@@ -81,7 +83,7 @@ export default class ImageTab extends Tab {
       button.classList.add('delete-button');
 
       this.setDraggable({
-        draggableList: container,
+        draggableItem: container,
         dataName: 'images',
         dataIndex: i,
         data: this.images,

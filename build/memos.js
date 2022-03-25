@@ -4,28 +4,31 @@ export default class MemoTab extends Tab {
         super(element);
         this.memos = this.loadLocalData('memos') || [];
         this.dragStartIndex = null;
-        this.modalForm.addEventListener('submit', this.handleClick);
         this.render();
     }
     setModalInputs() {
-        this.modalForm.innerHTML = '';
-        const title = document.createElement('label');
-        const description = document.createElement('label');
-        const button = document.createElement('button');
-        title.htmlFor = 'title';
-        title.innerHTML = `
-      Title
-      <input type="text" id='title'/>    
+        this.modal.innerHTML = '';
+        const template = `
+      <div class="modal">
+        <button id="closeModal">_</button>
+        <form id="modalForm">
+          <label for="title">
+            Title
+            <input type="text" id='title'/>    
+          </label>
+          <label for="description">
+            Contents
+            <textarea id="description"></textarea>
+          </label>
+          <button type="submit">Add</button>
+        </form>
+      </div>
     `;
-        description.htmlFor = 'description';
-        description.innerHTML = `
-      Contents
-      <textarea id="description"></textarea>
-    `;
-        button.type = 'submit';
-        button.innerText = 'Add';
-        this.modalForm.prepend(title, description);
-        this.modalForm.appendChild(button);
+        this.modal.innerHTML = template;
+        const modalForm = this.modal.querySelector('#modalForm');
+        const closeButton = this.modal.querySelector('#closeModal');
+        modalForm.addEventListener('submit', this.submitModalForm.bind(this));
+        closeButton.addEventListener('click', this.closeModal.bind(this));
     }
     handleClickDeleteButton(e) {
         const target = e.target;
@@ -63,7 +66,7 @@ export default class MemoTab extends Tab {
             button.classList.add('delete-button');
             button.setAttribute('draggable', 'false');
             this.setDraggable({
-                draggableList: container,
+                draggableItem: container,
                 dataName: 'memos',
                 dataIndex: i,
                 data: this.memos,
