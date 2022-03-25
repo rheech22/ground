@@ -167,7 +167,7 @@ export default class TaskTab extends Tab {
       const input = document.createElement('input');
 
       input.type = 'text';
-      input.placeholder = 'what are u gonna do?';
+      input.placeholder = 'Add task...';
       input.autofocus = true;
 
       const submitButton = document.createElement('button');

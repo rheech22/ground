@@ -16,20 +16,21 @@ type LocalData<T> = {
 export default abstract class Tab {
   protected element: HTMLElement;
 
-  private addButton: HTMLButtonElement = document.querySelector('button')! as HTMLButtonElement;
-
-  protected modal: HTMLDivElement = document.querySelector('.modalWrapper')! as HTMLDivElement;
-
   protected dataContainer: HTMLDivElement;
 
   protected dragStartIndex: number | null = null;
 
+  private addButton: HTMLButtonElement;
+
+  protected modal: HTMLDivElement = document.querySelector('.modalWrapper')! as HTMLDivElement;
+
   constructor(element: HTMLElement) {
     this.element = element;
+    this.addButton = this.element.querySelector('.addButton')! as HTMLButtonElement;
     this.dataContainer = this.element.querySelector('.data-container') as HTMLDivElement;
 
-    this.modal.addEventListener('click', this.closeModal);
     this.addButton.addEventListener('click', this.popUp.bind(this));
+    this.modal.addEventListener('click', this.closeModal);
 
     this.setModalInputs();
     this.render();

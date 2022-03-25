@@ -2,13 +2,13 @@
 import { LABEL_BACKGROUND, LABEL_FONT } from './constants/colors.js';
 export default class Tab {
     constructor(element) {
-        this.addButton = document.querySelector('button');
-        this.modal = document.querySelector('.modalWrapper');
         this.dragStartIndex = null;
+        this.modal = document.querySelector('.modalWrapper');
         this.element = element;
+        this.addButton = this.element.querySelector('.addButton');
         this.dataContainer = this.element.querySelector('.data-container');
-        this.modal.addEventListener('click', this.closeModal);
         this.addButton.addEventListener('click', this.popUp.bind(this));
+        this.modal.addEventListener('click', this.closeModal);
         this.setModalInputs();
         this.render();
     }
