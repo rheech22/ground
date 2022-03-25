@@ -1,5 +1,7 @@
 import Tab from './tab.js';
 
+import { getVideoId } from './utils.js';
+
 type Video = {
   description: string;
   videoId: string;
@@ -52,20 +54,17 @@ export default class VideoTab extends Tab {
 
   protected submit(inputValues: string[]) {
     if (inputValues.length === 2) {
-      if (!inputValues[0] || !inputValues[1]) return;
+      const [videoUrl, description] = inputValues;
 
-      let videoId = inputValues[0].split('v=')[1];
-      const description = inputValues[1];
-      const ampersandIndex = videoId.indexOf('&');
+      if (!videoUrl || description) return;
 
-      if (ampersandIndex !== -1) {
-        videoId = videoId.substring(0, ampersandIndex);
-      }
+      const videoId = getVideoId(videoUrl);
 
       this.videos.push({
         description,
         videoId,
       });
+
       this.saveLocalData({ name: 'videos', data: this.videos });
     }
     this.popDown();

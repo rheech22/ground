@@ -1,4 +1,5 @@
 import Tab from './tab.js';
+import { getVideoId } from './utils.js';
 export default class VideoTab extends Tab {
     constructor(element) {
         super(element);
@@ -35,14 +36,10 @@ export default class VideoTab extends Tab {
     }
     submit(inputValues) {
         if (inputValues.length === 2) {
-            if (!inputValues[0] || !inputValues[1])
+            const [videoUrl, description] = inputValues;
+            if (!videoUrl || description)
                 return;
-            let videoId = inputValues[0].split('v=')[1];
-            const description = inputValues[1];
-            const ampersandIndex = videoId.indexOf('&');
-            if (ampersandIndex !== -1) {
-                videoId = videoId.substring(0, ampersandIndex);
-            }
+            const videoId = getVideoId(videoUrl);
             this.videos.push({
                 description,
                 videoId,

@@ -70,6 +70,7 @@ export default class Template extends HTMLElement {
         this.detachListeners();
 
         const { name } = content.dataset;
+
         if (name && tabs[name]) {
           new tabs[name](content);
         }
